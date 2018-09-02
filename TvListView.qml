@@ -1,10 +1,11 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.2
 
-Rectangle {
+Pane {
     property color highlightColor
     property color primaryColor: "gray"
     property string title: ""
+    padding: 0
     Component {
         id: tvDelegate
         Item {
@@ -38,18 +39,21 @@ Rectangle {
         }
     }
 
-    ListView {
-        id: list
+    ScrollView{
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: titleRect.bottom
         anchors.bottom: parent.bottom
-        model: TvListModel{}
-        delegate: tvDelegate
-        highlight: Rectangle { color: highlightColor}
-        focus: true
-        //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
-        highlightMoveDuration: 100
-        clip: true
+        ListView {
+            id: list
+            anchors.fill: parent
+            model: TvListModel{}
+            delegate: tvDelegate
+            highlight: Rectangle { color: highlightColor}
+            focus: true
+            //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
+            highlightMoveDuration: 100
+            clip: true
+        }
     }
 }

@@ -132,14 +132,16 @@ ApplicationWindow {
             width: parent.width/4
             color: Material.color(primary,Material.Shade50)
 
+
             SplitView{
                 anchors.fill: parent
+                anchors.bottom: sidebarOptions.top
+                property int bottomPadding: 0
                 orientation: Qt.Vertical
                 PackageListView{
                     id: packageListView
                     height: parent.height/3
                     width: parent.width
-                    color: "transparent"
                     highlightColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
                     title: "PACKAGES"
@@ -149,10 +151,10 @@ ApplicationWindow {
                     id: tvListView
                     height: parent.height/3
                     width: parent.width
-                    color: "transparent"
                     highlightColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
                     title: "TVs"
+                    bottomPadding: sidebarOptions.height
                 }
             }
             Rectangle{
