@@ -155,6 +155,7 @@ ApplicationWindow {
                     primaryColor: Material.color(accent)
                     title: "TVs"
                     bottomPadding: sidebarOptions.height
+                    onAddButtonClicked: console.log("YEET")
                 }
             }
             Rectangle{

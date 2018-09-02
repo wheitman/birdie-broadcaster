@@ -1,10 +1,13 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Material 2.2
+import QtQuick.Controls.Styles 1.4
 
 Pane {
     property color highlightColor
     property color primaryColor: "gray"
     property string title: ""
+    signal addButtonClicked
     padding: 0
     Component {
         id: tvDelegate
@@ -37,6 +40,29 @@ Pane {
             text: title
             color: "white"
         }
+    }
+
+    ToolButton{
+//        contentItem: Text {
+//            text: "+"
+//            color: "white"
+//            anchors.fill: parent
+//            opacity: enabled ? 1.0 : 0.3
+//            font.pointSize: 100
+//            minimumPointSize: 10
+//            fontSizeMode: Text.VerticalFit
+//            horizontalAlignment: Text.AlignHCenter
+//            verticalAlignment: Text.AlignVCenter
+//        }
+        height: titleRect.height
+        width: height
+        anchors.right: parent.right
+        anchors.top: parent.top
+        icon.source: "icons/add.svg"
+        icon.color: "white"
+        //Material.background: "transparent"
+        //Material.foreground: "white"
+        onClicked: (addButtonClicked())
     }
 
     ScrollView{
