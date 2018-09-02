@@ -18,6 +18,7 @@ DEFINES += QUAZIP_STATIC
 SOURCES += \
         main.cpp \
     package.cpp \
+    packagemanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,3 +35,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     package.h \
+    packagemanager.h

@@ -4,6 +4,7 @@
 #include "quazip.h"
 #include "quazipfile.h"
 #include "lib/quazip/JlCompress.h"
+#include "packagemanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
 
     //JlCompress::compressDir("hana.bpkg","D:/OneDrive/Pictures/zoo-simple");
     //JlCompress::extractDir("hana.bpkg","hana");
+    packageManager pkgManager;
 
     return app.exec();
 }
