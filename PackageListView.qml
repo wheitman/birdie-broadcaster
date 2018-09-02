@@ -1,13 +1,15 @@
 import QtQuick 2.11
 
 Rectangle {
+    property color highlightColor
+    property color primaryColor: "gray"
     Component {
         id: packageDelegate
         Item {
             width: parent.width
             height: 40
             Column {
-                Text { text: name; padding: 5}
+                Text { text: name; padding: 5; font.weight: Font.DemiBold}
                 Text { text: "<i>"+source+"</i>"; leftPadding: 5}
             }
             MouseArea {
@@ -17,14 +19,35 @@ Rectangle {
         }
     }
 
+    Rectangle {
+        id: titleRect
+        color: primaryColor
+        anchors.top: parent.top
+        width: parent.width
+        height: 30
+        Text {
+            padding: 5
+            minimumPointSize: 10
+            font.pointSize: 40
+            anchors.fill: parent
+            fontSizeMode: Text.VerticalFit
+            text: "PACKAGES"
+            color: "white"
+        }
+    }
+
     ListView {
         id: list
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: titleRect.bottom
+        anchors.bottom: parent.bottom
         model: PackageListModel{}
         delegate: packageDelegate
-        highlight: Rectangle { color: "lightsteelblue"; radius: 2 }
+        highlight: Rectangle { color: highlightColor}
         focus: true
         onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
+        highlightMoveDuration: 100
     }
     clip: true
 

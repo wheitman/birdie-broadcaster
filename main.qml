@@ -30,6 +30,8 @@ ApplicationWindow {
                 height: parent.height/2
                 width: parent.width
                 color: "transparent"
+                highlightColor: Material.color(accent, Material.Shade100)
+                primaryColor: Material.color(primary)
             }
         }
         Column {
