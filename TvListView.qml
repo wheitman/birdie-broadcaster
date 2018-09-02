@@ -1,12 +1,12 @@
 import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.2
 
 Rectangle {
     property color highlightColor
     property color primaryColor: "gray"
     property string title: ""
     Component {
-        id: packageDelegate
+        id: tvDelegate
         Item {
             width: parent.width
             height: 40
@@ -44,8 +44,8 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: titleRect.bottom
         anchors.bottom: parent.bottom
-        model: PackageListModel{}
-        delegate: packageDelegate
+        model: TvListModel{}
+        delegate: tvDelegate
         highlight: Rectangle { color: highlightColor}
         focus: true
         //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')

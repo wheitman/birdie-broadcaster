@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>PackageListView.qml</file>
         <file>PackageListModel.qml</file>
+        <file>TvListView.qml</file>
+        <file>TvListModel.qml</file>
     </qresource>
 </RCC>
