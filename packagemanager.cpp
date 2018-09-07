@@ -9,9 +9,10 @@ packageManager::packageManager(QObject *parent) : QObject(parent)
 }
 
 void packageManager::checkDirectory(){
-    qDebug("Checking directory");
+    qInfo("Package Manager is checking the package directory");
     QDir dir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
     if (!dir.exists()) {
         dir.mkpath(".");
+        qInfo("Package Manager is creating the package directory.");
     }
 }

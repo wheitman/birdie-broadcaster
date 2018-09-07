@@ -99,7 +99,7 @@ ApplicationWindow {
             color: Material.color(Material.Yellow)
         }
         header.visible: false
-        Text{
+        Label{
             text: "This will broadcast a Canary alert across campus. Are you sure?"
         }
         RowLayout{
@@ -120,6 +120,39 @@ ApplicationWindow {
                     alertConfirmation.reject()
                 }
             }
+        }
+    }
+
+    Dialog {
+        id: addTvDialog
+        height: 400
+        width: 600
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        title: qsTr("Add a TV")
+
+        ColumnLayout{
+            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            TextField {
+                id: nameField
+                placeholderText: "Name (i.e. \"Main entrance\")"
+            }
+            TextField {
+                id: ipField
+                placeholderText: "IP address (i.e. \"192.168.1.240\")"
+            }
+        }
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        onAccepted: {
+            nameField.clear()
+            ipField.clear()
+            //add TV to list
+        }
+        onRejected: {
+            nameField.clear()
+            ipField.clear()
         }
     }
 
@@ -155,7 +188,7 @@ ApplicationWindow {
                     primaryColor: Material.color(accent)
                     title: "TVs"
                     bottomPadding: sidebarOptions.height
-                    onAddButtonClicked: console.log("YEET")
+                    onAddButtonClicked: addTvDialog.open()
                 }
             }
             Rectangle{
