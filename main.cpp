@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     packageManager pkgManager;
     tvManager tvManager;
 
+    tvManager.addTv("My TV","255");
     qDebug(tvManager.getTvList().value(1).toLatin1());
 
     return app.exec();

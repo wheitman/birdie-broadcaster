@@ -11,6 +11,7 @@ public:
     explicit tvManager(QObject *parent = nullptr);
     QStringList getTvList();
     QDir getTvPath();
+    void addTv(QString name, QString ip);
 private:
 
 };
