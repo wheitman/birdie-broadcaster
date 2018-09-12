@@ -28,9 +28,10 @@ void tvManager::addTv(QString name, QString ip){
 
     QVariantList tvList = manifestObject["tvs"].toArray().toVariantList();
 
-    QVariantMap tv = tvList[0].toMap();
-    tv.first()="YEET";
-    tvList[0] = tv;
+    QVariantMap tv;
+    tv.insert("ip",ip);
+    tv.insert("name",name);
+    tvList.append(tv);
 
     manifestObject.take("tvs");
     manifestObject.insert("tvs",QJsonValue::fromVariant(tvList));
