@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     QQuickStyle::setFallbackStyle("Universal");
 
     QQmlApplicationEngine engine;
+    qmlRegisterType<tvManager>("com.broadcaster.tvmanager",1,0,"TvManager");
     engine.load(QUrl("qrc:/main.qml"));
 
     //JlCompress::compressDir("hana.bpkg","D:/OneDrive/Pictures/zoo-simple");

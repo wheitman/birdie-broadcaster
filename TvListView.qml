@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Controls.Styles 1.4
 
 Pane {
-    property color highlightColor
+    property color accentColor
     property color primaryColor: "gray"
     property string title: ""
     signal addButtonClicked
@@ -30,39 +30,35 @@ Pane {
         color: primaryColor
         anchors.top: parent.top
         width: parent.width
-        height: 30
+        height: 50
         Text {
+            id: titleText
             padding: 5
             minimumPointSize: 10
             font.pointSize: 40
-            anchors.fill: parent
+            anchors.top: parent.top
+            anchors.left: parent.left
             fontSizeMode: Text.VerticalFit
             text: title
             color: "white"
+            height: parent.height*3/5
         }
-    }
-
-    ToolButton{
-//        contentItem: Text {
-//            text: "+"
-//            color: "white"
-//            anchors.fill: parent
-//            opacity: enabled ? 1.0 : 0.3
-//            font.pointSize: 100
-//            minimumPointSize: 10
-//            fontSizeMode: Text.VerticalFit
-//            horizontalAlignment: Text.AlignHCenter
-//            verticalAlignment: Text.AlignVCenter
-//        }
-        height: titleRect.height
-        width: height
-        anchors.right: parent.right
-        anchors.top: parent.top
-        icon.source: "icons/add.svg"
-        icon.color: "white"
-        //Material.background: "transparent"
-        //Material.foreground: "white"
-        onClicked: (addButtonClicked())
+        ToolButton{
+            height: parent.height*.5
+            width: height
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            background: Rectangle{
+                color:"white"
+                height: parent.height*.75
+                width: height
+                radius: height/2
+                anchors.centerIn: parent
+            }
+            icon.source: "icons/add.svg"
+            icon.color: primaryColor
+            onClicked: addButtonClicked()
+        }
     }
 
     ScrollView{
@@ -75,7 +71,7 @@ Pane {
             anchors.fill: parent
             model: TvListModel{}
             delegate: tvDelegate
-            highlight: Rectangle { color: highlightColor}
+            highlight: Rectangle { color: Material.color(accent, Material.Shade100)}
             focus: true
             //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
             highlightMoveDuration: 100

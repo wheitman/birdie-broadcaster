@@ -3,6 +3,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls 2.4
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.3
+import com.broadcaster.tvmanager 1.0
 
 ApplicationWindow {
     visible: true
@@ -16,6 +17,10 @@ ApplicationWindow {
     Material.theme: Material.Light
     Material.primary: primary
     Material.accent: accent
+
+    TvManager {
+        id: tvManager
+    }
 
     Dialog {
         id: canaryDialog
@@ -146,6 +151,7 @@ ApplicationWindow {
         }
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
+            tvManager.addTv(nameField.text,ipField.text)
             nameField.clear()
             ipField.clear()
             //add TV to list
@@ -184,7 +190,7 @@ ApplicationWindow {
                     id: tvListView
                     height: parent.height/3
                     width: parent.width
-                    highlightColor: Material.color(accent, Material.Shade100)
+                    accentColor: Material.color(accent)
                     primaryColor: Material.color(accent)
                     title: "TVs"
                     bottomPadding: sidebarOptions.height
