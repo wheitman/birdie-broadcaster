@@ -22,10 +22,6 @@ int main(int argc, char *argv[])
     //JlCompress::compressDir("hana.bpkg","D:/OneDrive/Pictures/zoo-simple");
     //JlCompress::extractDir("hana.bpkg","hana");
     packageManager pkgManager;
-    tvManager tvManager;
-
-    tvManager.addTv("My TV","244");
-    qDebug(tvManager.getTvList().value(1).toLatin1());
 
     return app.exec();
 }

@@ -9,8 +9,9 @@ class tvManager : public QObject
     Q_OBJECT
 public:
     explicit tvManager(QObject *parent = nullptr);
-    QStringList getTvList();
-    QDir getTvPath();
+    Q_INVOKABLE QStringList getTvList();
+    Q_INVOKABLE QStringList getIpList();
+    Q_INVOKABLE QDir getTvPath();
     Q_INVOKABLE void addTv(QString name, QString ip);
 private:
 

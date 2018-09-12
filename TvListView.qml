@@ -61,6 +61,14 @@ Pane {
         }
     }
 
+    function updateTvModel(model){
+        var tvs = tvManager.getTvList()
+        var ips = tvManager.getIpList()
+        for(var i in tvs){
+            model.append({name:tvs[i],source:ips[i]})
+        }
+    }
+
     ScrollView{
         anchors.left: parent.left
         anchors.right: parent.right
@@ -76,6 +84,7 @@ Pane {
             //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
             highlightMoveDuration: 100
             clip: true
+            Component.onCompleted: updateTvModel(model)
         }
     }
 }

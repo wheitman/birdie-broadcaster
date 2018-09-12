@@ -70,3 +70,32 @@ QStringList tvManager::getTvList(){
     manifestFile.close();
     return TVs;
 }
+
+QStringList tvManager::getIpList(){
+    qDebug("TV Manager is getting the IP list");
+    QStringList IPs = {"NULL ERROR"};
+
+    QFile manifestFile(getTvPath().absolutePath());
+
+    if (!manifestFile.open(QIODevice::ReadOnly)) {
+            qCritical("Couldn't open TV manifest for read");
+    }
+
+    QByteArray manifestArray = manifestFile.readAll();
+
+    QJsonDocument manifestDoc(QJsonDocument::fromJson(manifestArray));
+    QJsonObject manifestObject(manifestDoc.object());
+
+    if(manifestObject.contains("tvs") && manifestObject["tvs"].isArray()){
+        QJsonArray tvArray = manifestObject["tvs"].toArray();
+        IPs.clear();
+        for (int tvIndex = 0; tvIndex < tvArray.size(); tvIndex++) {
+            QString tvIp = tvArray[tvIndex].toObject()["ip"].toString();
+            IPs.append(tvIp);
+        }
+    }
+    else
+        qDebug("TV Manager: No TV array found.");
+    manifestFile.close();
+    return IPs;
+}
