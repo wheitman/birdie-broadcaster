@@ -2,12 +2,14 @@ import QtQuick 2.11
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Controls.Styles 1.4
+import com.broadcaster.tvmanager 1.0
 
 Pane {
     property color accentColor
     property color primaryColor: "gray"
     property string title: ""
     signal addButtonClicked
+    signal refresh
     padding: 0
     Component {
         id: tvDelegate
@@ -20,7 +22,22 @@ Pane {
             }
             MouseArea {
                 anchors.fill: parent
-                onClicked: list.currentIndex = index
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: {
+                    list.currentIndex = index
+                    if (mouse.button === Qt.RightButton)
+                        contextMenu.popup()
+                }
+                Menu{
+                    id: contextMenu
+
+                    TvManager{
+                        id: manager
+                    }
+
+                    MenuItem {text: "Delete"; onClicked: manager.removeTv("192.168.1.12")}
+                    MenuItem {text: "Edit"}
+                }
             }
         }
     }
@@ -44,28 +61,46 @@ Pane {
             height: parent.height*3/5
         }
         ToolButton{
+            id: addButton
             height: parent.height*.5
             width: height
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            background: Rectangle{
-                color:"white"
-                height: parent.height*.75
-                width: height
-                radius: height/2
-                anchors.centerIn: parent
-            }
             icon.source: "icons/add.svg"
-            icon.color: primaryColor
+            icon.color: "white"
             onClicked: addButtonClicked()
+        }
+        ToolButton{
+            id: refreshButton
+            height: parent.height*.5
+            width: height
+            anchors.left: addButton.right
+            anchors.bottom: parent.bottom
+            icon.source: "icons/refresh.svg"
+            icon.color: "white"
+            onClicked: {
+                refresh()
+            }
+            Behavior on rotation {
+                NumberAnimation {
+                    duration: 600
+                    easing.type: Easing.OutQuad
+                }
+            }
         }
     }
 
-    function updateTvModel(model){
+    onRefresh: {
+        updateTvModel()
+        refreshButton.rotation+=360
+    }
+
+    function updateTvModel(){
         var tvs = tvManager.getTvList()
         var ips = tvManager.getIpList()
+        list.model.clear()
         for(var i in tvs){
-            model.append({name:tvs[i],source:ips[i]})
+            list.model.append({name:tvs[i],source:ips[i]})
         }
     }
 
@@ -84,7 +119,7 @@ Pane {
             //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
             highlightMoveDuration: 100
             clip: true
-            Component.onCompleted: updateTvModel(model)
+            Component.onCompleted: updateTvModel()
         }
     }
 }

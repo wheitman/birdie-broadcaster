@@ -29,9 +29,37 @@ void tvManager::addTv(QString name, QString ip){
     QVariantList tvList = manifestObject["tvs"].toArray().toVariantList();
 
     QVariantMap tv;
-    tv.insert("ip",ip);
     tv.insert("name",name);
+    tv.insert("ip",ip);
     tvList.append(tv);
+
+    manifestObject.take("tvs");
+    manifestObject.insert("tvs",QJsonValue::fromVariant(tvList));
+
+    manifestFile.resize(0);
+    manifestFile.write(QJsonDocument(manifestObject).toJson());
+
+    manifestFile.close();
+}
+
+void tvManager::removeTv(QString ip){
+    qDebug("TV Manager is removing the TV at "+ip.toLatin1());
+    QFile manifestFile(getTvPath().absolutePath());
+    if(!manifestFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        qCritical("Couldn't open TV manifest for write");
+    }
+    QByteArray manifestArray = manifestFile.readAll();
+    QJsonDocument manifestDoc(QJsonDocument::fromJson(manifestArray));
+    QJsonObject manifestObject(manifestDoc.object());
+
+    QVariantList tvList = manifestObject["tvs"].toArray().toVariantList();
+
+    for(int i = 0; i < tvList.length(); i++){
+        if(tvList.at(i).toMap().value("ip")==ip){
+            tvList.removeAt(i);
+            break;
+        }
+    }
 
     manifestObject.take("tvs");
     manifestObject.insert("tvs",QJsonValue::fromVariant(tvList));

@@ -22,6 +22,14 @@ ApplicationWindow {
         id: tvManager
     }
 
+    Timer {
+        id: refreshTimer
+        interval: 60000 //refresh every minute
+        onTriggered: tvListView.refresh()
+        running: true
+        repeat: true
+    }
+
     Dialog {
         id: canaryDialog
         height: 400
@@ -154,7 +162,7 @@ ApplicationWindow {
             tvManager.addTv(nameField.text,ipField.text)
             nameField.clear()
             ipField.clear()
-            //add TV to list
+            tvListView.updateTvModel()
         }
         onRejected: {
             nameField.clear()

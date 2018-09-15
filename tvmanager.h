@@ -13,6 +13,7 @@ public:
     Q_INVOKABLE QStringList getIpList();
     Q_INVOKABLE QDir getTvPath();
     Q_INVOKABLE void addTv(QString name, QString ip);
+    Q_INVOKABLE void removeTv(QString ip);
 private:
 
 };
