@@ -36,7 +36,11 @@ Pane {
                         id: manager
                     }
 
-                    MenuItem {text: "Delete"; onClicked: manager.removeTv("192.168.1.12")}
+                    MenuItem {text: "Delete"; onClicked: {
+                            manager.removeTv(list.model.get(list.currentIndex).source)
+                            refresh()
+                        }
+                    }
                     MenuItem {text: "Edit"}
                 }
             }
