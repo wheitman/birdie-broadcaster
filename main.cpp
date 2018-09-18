@@ -19,9 +19,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<tvManager>("com.broadcaster.tvmanager",1,0,"TvManager");
     engine.load(QUrl("qrc:/main.qml"));
 
-    //JlCompress::compressDir("hana.bpkg","D:/OneDrive/Pictures/zoo-simple");
-    //JlCompress::extractDir("hana.bpkg","hana");
-    packageManager pkgManager;
+    packageManager manager;
+    JlCompress::compressDir(manager.getDirectoryPath()+"/animals.bpak","C:/Users/wheit/AppData/Roaming/Broadcaster/packages/animal_facts");
+    JlCompress::extractDir(manager.getDirectoryPath()+"/animals.bpak",manager.getDirectoryPath()+"/animal_facts2");
+    qDebug(manager.getDirectoryPath().toLatin1());
 
     return app.exec();
 }

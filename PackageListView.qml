@@ -5,6 +5,7 @@ Pane {
     property color highlightColor
     property color primaryColor: "gray"
     property string title: ""
+    property bool topFocus: true
     padding: 0
     Component {
         id: packageDelegate
@@ -17,7 +18,10 @@ Pane {
             }
             MouseArea {
                 anchors.fill: parent
-                onClicked: list.currentIndex = index
+                onClicked: {
+                    topFocus = true;
+                    list.currentIndex = index
+                }
             }
         }
     }
@@ -49,7 +53,7 @@ Pane {
             model: PackageListModel{}
             delegate: packageDelegate
             highlight: Rectangle { color: highlightColor}
-            focus: true
+            focus: topFocus
             //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
             highlightMoveDuration: 100
             clip: true

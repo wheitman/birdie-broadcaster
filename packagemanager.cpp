@@ -6,6 +6,7 @@
 packageManager::packageManager(QObject *parent) : QObject(parent)
 {
     checkDirectory();
+    mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
 }
 
 void packageManager::checkDirectory(){

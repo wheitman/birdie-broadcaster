@@ -189,6 +189,12 @@ ApplicationWindow {
                     id: packageListView
                     height: parent.height/3
                     width: parent.width
+                    onTopFocusChanged: {
+                        if(topFocus===true){
+                            tvListView.topFocus=false
+                            tvListView.scrollView.list.currentIndex = -1
+                        }
+                    }
                     highlightColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
                     title: "PACKAGES"
@@ -198,6 +204,12 @@ ApplicationWindow {
                     id: tvListView
                     height: parent.height/3
                     width: parent.width
+                    onTopFocusChanged: {
+                        if(topFocus===true){
+                            packageListView.topFocus=false
+                            packageListView.scrollView.list.currentIndex = -1
+                        }
+                    }
                     accentColor: Material.color(accent)
                     primaryColor: Material.color(accent)
                     title: "TVs"

@@ -71,7 +71,7 @@ void tvManager::removeTv(QString ip){
 }
 
 QStringList tvManager::getTvList(){
-    qDebug("TV Manager is getting the TV list");
+    //qDebug("TV Manager is getting the TV list");
     QStringList TVs = {"NULL ERROR"};
 
     QFile manifestFile(getTvPath().absolutePath());
@@ -100,7 +100,7 @@ QStringList tvManager::getTvList(){
 }
 
 QStringList tvManager::getIpList(){
-    qDebug("TV Manager is getting the IP list");
+    //qDebug("TV Manager is getting the IP list");
     QStringList IPs = {"NULL ERROR"};
 
     QFile manifestFile(getTvPath().absolutePath());
