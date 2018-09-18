@@ -2,16 +2,22 @@
 #define PACKAGE_H
 
 #include <QObject>
+#include "packagemanager.h"
 
 class Package : public QObject
 {
     Q_OBJECT
 
 public:
-    Package();
-    QString getPackageName() const {return mPackageName;}
+    Package(QString fileName);
+    Package(QString fileName, QString title);
+    QString getPackageFileName() const {return mPackageFileName;}
+    QString getPackageTitle() const {return mPackageTitle;}
+    void open();
 private:
-    QString mPackageName;
+    QString mPackageFileName;
+    QString mPackageTitle;
+    packageManager manager;
 };
 
 #endif // PACKAGE_H
