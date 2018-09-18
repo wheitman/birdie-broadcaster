@@ -1,8 +1,10 @@
 import QtQuick 2.11
+import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls 2.4
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.3
+
 import com.broadcaster.tvmanager 1.0
 
 ApplicationWindow {
@@ -170,6 +172,16 @@ ApplicationWindow {
         }
     }
 
+    FileDialog {
+        id: slideFileDialog
+        title: "Select the slides to add"
+        folder: shortcuts.pictures
+        selectMultiple: true
+        onAccepted: {
+            console.log(slideFileDialog.fileUrls)
+        }
+    }
+
     SplitView{
         anchors.fill: parent
         orientation: Qt.Horizontal
@@ -178,7 +190,6 @@ ApplicationWindow {
             id: sidebar
             width: parent.width/4
             color: Material.color(primary,Material.Shade50)
-
 
             SplitView{
                 anchors.fill: parent
@@ -195,9 +206,10 @@ ApplicationWindow {
                             tvListView.scrollView.list.currentIndex = -1
                         }
                     }
-                    highlightColor: Material.color(accent, Material.Shade100)
+                    accentColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
                     title: "PACKAGES"
+                    onAddButtonClicked: slideFileDialog.open()
                 }
                 TvListView{
                     anchors.top: packageListView.bottom

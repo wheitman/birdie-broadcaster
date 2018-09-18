@@ -13,3 +13,7 @@ Package::Package(QString fileName, QString title){
 void Package::open(){
     JlCompress::extractDir(manager.getDirectoryPath()+"/"+mPackageFileName,manager.getDirectoryPath()+"/"+mPackageFileName.split(".").first());
 }
+
+bool Package::isOpened(){
+    return QDir(manager.getDirectoryPath()+"/"+mPackageFileName.split(".").first()).exists();
+}
