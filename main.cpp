@@ -25,7 +25,10 @@ int main(int argc, char *argv[])
 //    JlCompress::extractDir(manager.getDirectoryPath()+"/animals.bpak",manager.getDirectoryPath()+"/animal_facts2");
 //    qDebug(manager.getDirectoryPath().toLatin1());
 
-    Package("animals.bpak").open();
+    Package pack("animals.bpak");
+    pack.open();
+    qDebug(packageManager().getPackageFilenames().first().toLatin1());
+    pack.close();
 
     return app.exec();
 }

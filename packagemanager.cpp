@@ -17,3 +17,8 @@ void packageManager::checkDirectory(){
         qInfo("Package Manager is creating the package directory.");
     }
 }
+
+QStringList packageManager::getPackageFilenames(){
+    QStringList filenameList = QDir(getDirectoryPath()).entryList(QStringList() << "*.bpak", QDir::Files);
+    return filenameList;
+}

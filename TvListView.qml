@@ -10,7 +10,7 @@ Pane {
     property string title: ""
     signal addButtonClicked
     signal refresh
-    property bool topFocus: false
+    property bool highlighted: false
     padding: 0
     Component {
         id: tvDelegate
@@ -26,6 +26,7 @@ Pane {
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: {
                     list.currentIndex = index;
+                    highlighted = true;
                     if (mouse.button === Qt.RightButton)
                         contextMenu.popup()
                 }
@@ -120,8 +121,7 @@ Pane {
             anchors.fill: parent
             model: TvListModel{}
             delegate: tvDelegate
-            highlight: Rectangle { color: Material.color(accent, Material.Shade100)}
-            focus: topFocus
+            highlight: Rectangle { color: highlighted ? Material.color(accent, Material.Shade100) : "transparent"}
             //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
             highlightMoveDuration: 100
             clip: true
