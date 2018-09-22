@@ -5,7 +5,7 @@ Rectangle {
     property int primary: Material.BlueGrey
     property int accent: Material.Teal
 
-    color: Material.color(primary, Material.Shade50)
+    color: "transparent"//Material.color(primary, Material.Shade50)
 
     Image {
         id: broadcastImage

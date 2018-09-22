@@ -24,6 +24,8 @@ SOURCES += \
 RESOURCES += qml.qrc \
     res.qrc
 
+RC_ICONS = res/broadcast64.ico
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 

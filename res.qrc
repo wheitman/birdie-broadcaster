@@ -3,5 +3,6 @@
         <file alias="add.svg">res/add-24px.svg</file>
         <file alias="refresh.svg">res/refresh-24px.svg</file>
         <file alias="broadcast.svg">res/broadcast.svg</file>
+        <file alias="broadcast64.ico">res/broadcast64.ico</file>
     </qresource>
 </RCC>

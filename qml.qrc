@@ -5,6 +5,7 @@
         <file>PackageListModel.qml</file>
         <file>TvListView.qml</file>
         <file>TvListModel.qml</file>
-        <file>WelcomeFrame.qml</file>
+        <file>WelcomeView.qml</file>
+        <file>PackageView.qml</file>
     </qresource>
 </RCC>

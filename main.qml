@@ -201,8 +201,11 @@ ApplicationWindow {
                     height: parent.height/3
                     width: parent.width
                     onHighlightedChanged: {
-                        if(packageListView.highlighted===true)
+                        if(packageListView.highlighted===true){
                             tvListView.highlighted = false
+                            packageView.visible = true
+                            welcomeView.visible = false
+                        }
                     }
                     accentColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
@@ -241,9 +244,15 @@ ApplicationWindow {
                 }
             }
         }
-        WelcomeFrame{
-            Text{
-                text: "Hello"
+        Rectangle{
+            color: Material.color(primary, Material.Shade50)
+            WelcomeView{
+                id: welcomeView
+                anchors.fill: parent
+            }
+            PackageView{
+                id: packageView
+                visible: false
             }
         }
     }

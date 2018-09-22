@@ -7,6 +7,7 @@
 #include "packagemanager.h"
 #include "package.h"
 #include "tvmanager.h"
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     qmlRegisterType<tvManager>("com.broadcaster.tvmanager",1,0,"TvManager");
     engine.load(QUrl("qrc:/main.qml"));
+
+    app.setWindowIcon(QIcon(":/icons/broadcast64.ico"));
 
 //    packageManager manager;
 //    JlCompress::compressDir(manager.getDirectoryPath()+"/animals.bpak","C:/Users/wheit/AppData/Roaming/Broadcaster/packages/animal_facts");

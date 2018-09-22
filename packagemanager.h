@@ -13,6 +13,7 @@ public:
     QString getDirectoryPath() const {return mDirectory.absolutePath();}
     QString getFilePath(QString fileName) const {return mDirectory.absoluteFilePath(fileName);}
     QStringList getPackageFilenames();
+    void setCurrentPackage(QString packageIp);
 private:
     void checkDirectory();
     QDir mDirectory;
