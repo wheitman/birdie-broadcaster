@@ -2,7 +2,7 @@
 #define PACKAGE_H
 
 #include <QObject>
-#include "packagemanager.h"
+#include <QSettings>
 
 class Package : public QObject
 {
@@ -19,7 +19,6 @@ public:
 private:
     QString mPackageFileName;
     QString mPackageTitle;
-    packageManager manager;
 };
 
 #endif // PACKAGE_H

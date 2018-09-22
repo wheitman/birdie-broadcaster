@@ -2,6 +2,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QtGlobal>
+#include <QSettings>
 
 packageManager::packageManager(QObject *parent) : QObject(parent)
 {
@@ -21,4 +22,14 @@ void packageManager::checkDirectory(){
 QStringList packageManager::getPackageFilenames(){
     QStringList filenameList = QDir(getDirectoryPath()).entryList(QStringList() << "*.bpak", QDir::Files);
     return filenameList;
+}
+
+QString packageManager::getCurrentPackageName(){
+    Package package("EXDEE");
+    return package.getPackageFileName();
+}
+
+void packageManager::initSettings(){
+    QSettings settings("Heitman","Birdie Broadcaster");
+    settings.setValue("packageRoot",mDirectory.absolutePath());
 }

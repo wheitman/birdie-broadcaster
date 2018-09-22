@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDir>
+#include "package.h"
 
 class packageManager : public QObject
 {
@@ -13,7 +14,9 @@ public:
     QString getDirectoryPath() const {return mDirectory.absolutePath();}
     QString getFilePath(QString fileName) const {return mDirectory.absoluteFilePath(fileName);}
     QStringList getPackageFilenames();
+    QString getCurrentPackageName();
     void setCurrentPackage(QString packageIp);
+    void initSettings();
 private:
     void checkDirectory();
     QDir mDirectory;
