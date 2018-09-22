@@ -241,14 +241,10 @@ ApplicationWindow {
                 }
             }
         }
-        Column {
-            anchors.left: sidebar.right
-
-            RadioButton { text: qsTr("Small") }
-            RadioButton { text: qsTr("Medium");  checked: true }
-            RadioButton { text: qsTr("Large") }
+        WelcomeFrame{
+            Text{
+                text: "Hello"
+            }
         }
     }
-
-
 }
