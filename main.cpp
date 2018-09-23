@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     pack.open();
     qDebug(packageManager().getPackageFilenames().first().toLatin1());
     pack.close();
-    qDebug(packageManager().getCurrentPackageName().toLatin1());
+    qDebug(packageManager().getCurrentPackage()->getPackageFileName().toLatin1());
 
     return app.exec();
 }

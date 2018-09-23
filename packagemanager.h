@@ -15,12 +15,13 @@ public:
     QString getFilePath(QString fileName) const {return mDirectory.absoluteFilePath(fileName);}
     QStringList getPackageFilenames();
     QString getCurrentPackageName();
+    Package* getCurrentPackage();
     void setCurrentPackage(QString packageIp);
     void initSettings();
 private:
     void checkDirectory();
     QDir mDirectory;
-
+    Package *mCurrentPackage;
 signals:
 
 public slots:

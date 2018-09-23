@@ -8,6 +8,7 @@ packageManager::packageManager(QObject *parent) : QObject(parent)
 {
     checkDirectory();
     mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
+    mCurrentPackage = new Package("NULL");
 }
 
 void packageManager::checkDirectory(){
@@ -32,4 +33,8 @@ QString packageManager::getCurrentPackageName(){
 void packageManager::initSettings(){
     QSettings settings("Heitman","Birdie Broadcaster");
     settings.setValue("packageRoot",mDirectory.absolutePath());
+}
+
+Package* packageManager::getCurrentPackage(){
+    return mCurrentPackage;
 }
