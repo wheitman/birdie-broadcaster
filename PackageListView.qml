@@ -19,7 +19,6 @@ Pane {
             height: 40
             Column {
                 Text { text: name; padding: 5; font.weight: Font.DemiBold}
-                Text { text: "<i>"+source+"</i>"; leftPadding: 5}
             }
             MouseArea {
                 anchors.fill: parent
@@ -102,11 +101,10 @@ Pane {
     }
 
     function updatePackageModel(){
-        var tvs = tvManager.getTvList()
-        var ips = tvManager.getIpList()
+        var packs = tvManager.getTvList()
         list.model.clear()
-        for(var i in tvs){
-            list.model.append({name:tvs[i],source:ips[i]})
+        for(var i in packs){
+            list.model.append({name:packs[i]})
         }
     }
 

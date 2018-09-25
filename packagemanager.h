@@ -16,12 +16,15 @@ public:
     QStringList getPackageFilenames();
     QString getCurrentPackageName();
     Package* getCurrentPackage();
-    void setCurrentPackage(QString packageIp);
+    int count() const {return mPackages.length();}
+    void setCurrentPackage(QString fileName);
     void initSettings();
 private:
     void checkDirectory();
+    void resetPackages();
     QDir mDirectory;
     Package *mCurrentPackage;
+    QList<Package*> mPackages;
 signals:
 
 public slots:

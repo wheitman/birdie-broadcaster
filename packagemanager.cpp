@@ -8,11 +8,20 @@ packageManager::packageManager(QObject *parent) : QObject(parent)
 {
     checkDirectory();
     mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
-    mCurrentPackage = new Package("NULL");
+    resetPackages();
+    mCurrentPackage = mPackages.first();
+}
+
+void packageManager::resetPackages(){
+    mPackages.clear(); //start fresh
+    QStringList filenameList = getPackageFilenames();
+    for(int i = 0; i<filenameList.length(); i++){
+        mPackages.append(new Package(filenameList.at(i)));
+    }
 }
 
 void packageManager::checkDirectory(){
-    qInfo("Package Manager is checking the package directory");
+    //qInfo("Package Manager is checking the package directory");
     QDir dir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
     if (!dir.exists()) {
         dir.mkpath(".");
@@ -37,4 +46,8 @@ void packageManager::initSettings(){
 
 Package* packageManager::getCurrentPackage(){
     return mCurrentPackage;
+}
+
+void packageManager::setCurrentPackage(QString fileName){
+
 }

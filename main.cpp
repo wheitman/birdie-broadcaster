@@ -30,12 +30,7 @@ int main(int argc, char *argv[])
 
     packageManager().initSettings();
 
-
-    Package pack("animals.bpak");
-    pack.open();
-    qDebug(packageManager().getPackageFilenames().first().toLatin1());
-    pack.close();
-    qDebug(packageManager().getCurrentPackage()->getPackageFileName().toLatin1());
+    qDebug(QString::number(packageManager().count()).toLatin1());
 
     return app.exec();
 }
