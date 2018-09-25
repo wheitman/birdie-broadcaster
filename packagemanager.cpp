@@ -35,8 +35,7 @@ QStringList packageManager::getPackageFilenames(){
 }
 
 QString packageManager::getCurrentPackageName(){
-    Package package("EXDEE");
-    return package.getPackageFileName();
+    return mCurrentPackage->getPackageFileName();
 }
 
 void packageManager::initSettings(){
@@ -49,5 +48,7 @@ Package* packageManager::getCurrentPackage(){
 }
 
 void packageManager::setCurrentPackage(QString fileName){
-
+    mCurrentPackage = new Package(fileName);
+    emit currentPackageNameChanged();
+    qDebug("Set pack");
 }

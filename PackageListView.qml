@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.2
 import QtQuick.Controls.Styles 1.4
 import com.broadcaster.tvmanager 1.0
+import com.broadcaster.packagemanager 1.0
 
 Pane {
     property color accentColor
@@ -26,6 +27,7 @@ Pane {
                 onClicked: {
                     list.currentIndex = index
                     highlighted = true
+                    packageManager.setCurrentPackage(list.model.get(list.currentIndex).name)
                     if (mouse.button === Qt.RightButton)
                         contextMenu.popup()
                 }
@@ -100,8 +102,13 @@ Pane {
         refreshButton.rotation+=360
     }
 
+    PackageManager {
+        id: packageManager
+    }
+
     function updatePackageModel(){
-        var packs = tvManager.getTvList()
+        packageManager.resetPackages()
+        var packs = packageManager.getPackageFilenames()
         list.model.clear()
         for(var i in packs){
             list.model.append({name:packs[i]})

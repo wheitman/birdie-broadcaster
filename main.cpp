@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     qmlRegisterType<tvManager>("com.broadcaster.tvmanager",1,0,"TvManager");
+    qmlRegisterType<packageManager>("com.broadcaster.packagemanager",1,0,"PackageManager");
     engine.load(QUrl("qrc:/main.qml"));
 
     app.setWindowIcon(QIcon(":/icons/broadcast64.ico"));

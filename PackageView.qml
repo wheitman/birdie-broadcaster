@@ -1,8 +1,14 @@
 import QtQuick 2.0
 import QtQuick.Controls.Material 2.2
+import com.broadcaster.packagemanager 1.0
 
 Rectangle {
     anchors.fill: parent
+
+    PackageManager {
+        id: packageManager
+        onCurrentPackageNameChanged: console.log("CHANGE")
+    }
 
     Rectangle{
         color: Material.color(Material.Teal)
@@ -10,7 +16,7 @@ Rectangle {
         height: 50
 
         Text{
-            text: "Package name here"
+            text: packageManager.currentPackageName
             horizontalAlignment: Text.AlignHCenter
             color: "white"
             minimumPointSize: 16
