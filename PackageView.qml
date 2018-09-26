@@ -4,10 +4,15 @@ import com.broadcaster.packagemanager 1.0
 
 Rectangle {
     anchors.fill: parent
+    signal packageChanged
 
     PackageManager {
         id: packageManager
-        onCurrentPackageNameChanged: console.log("CHANGE")
+        onCurrentPackageNameChanged: console.log("YEET")
+    }
+
+    onPackageChanged: {
+        title.text = packageManager.currentPackageName
     }
 
     Rectangle{
@@ -16,6 +21,7 @@ Rectangle {
         height: 50
 
         Text{
+            id: title
             text: packageManager.currentPackageName
             horizontalAlignment: Text.AlignHCenter
             color: "white"

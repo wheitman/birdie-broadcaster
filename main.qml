@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.3
 
 import com.broadcaster.tvmanager 1.0
+import com.broadcaster.packagemanager 1.0
 
 ApplicationWindow {
     visible: true
@@ -22,6 +23,10 @@ ApplicationWindow {
 
     TvManager {
         id: tvManager
+    }
+
+    PackageManager {
+        id: packageManager
     }
 
     Timer {
@@ -211,6 +216,7 @@ ApplicationWindow {
                     primaryColor: Material.color(accent)
                     title: "PACKAGES"
                     onAddButtonClicked: slideFileDialog.open()
+                    onPackageSelected: packageView.packageChanged()
                 }
                 TvListView{
                     anchors.top: packageListView.bottom

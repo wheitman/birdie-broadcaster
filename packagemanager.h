@@ -8,14 +8,15 @@
 class packageManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString currentPackageName READ getCurrentPackageName NOTIFY currentPackageNameChanged)
+    Q_PROPERTY(QString currentPackageName READ getCurrentPackageName WRITE setCurrentPackage NOTIFY currentPackageNameChanged)
 public:
     explicit packageManager(QObject *parent = nullptr);
     QDir getDirectory() const {return mDirectory;}
     QString getDirectoryPath() const {return mDirectory.absolutePath();}
     QString getFilePath(QString fileName) const {return mDirectory.absoluteFilePath(fileName);}
     Q_INVOKABLE QStringList getPackageFilenames();
-    QString getCurrentPackageName();
+    Q_INVOKABLE QString getCurrentPackageName();
+    void setCurrentPackageName(QString fileName);
     Package* getCurrentPackage();
     int count() const {return mPackages.length();}
     Q_INVOKABLE void setCurrentPackage(QString fileName);
@@ -24,7 +25,7 @@ public:
 private:
     void checkDirectory();
     QDir mDirectory;
-    Package *mCurrentPackage;
+    static Package *mCurrentPackage;
     QList<Package*> mPackages;
 signals:
     void currentPackageNameChanged();

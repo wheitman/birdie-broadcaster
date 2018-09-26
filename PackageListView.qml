@@ -11,6 +11,7 @@ Pane {
     property string title: ""
     signal addButtonClicked
     signal refresh
+    signal packageSelected
     property bool highlighted: false
     padding: 0
     Component {
@@ -27,7 +28,8 @@ Pane {
                 onClicked: {
                     list.currentIndex = index
                     highlighted = true
-                    packageManager.setCurrentPackage(list.model.get(list.currentIndex).name)
+                    packageManager.currentPackageName = list.model.get(list.currentIndex).name
+                    packageSelected()
                     if (mouse.button === Qt.RightButton)
                         contextMenu.popup()
                 }

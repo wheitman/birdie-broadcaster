@@ -4,12 +4,13 @@
 #include <QtGlobal>
 #include <QSettings>
 
+Package* packageManager::mCurrentPackage = new Package("NULL");
+
 packageManager::packageManager(QObject *parent) : QObject(parent)
 {
     checkDirectory();
     mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
     resetPackages();
-    mCurrentPackage = mPackages.first();
 }
 
 void packageManager::resetPackages(){
@@ -50,5 +51,4 @@ Package* packageManager::getCurrentPackage(){
 void packageManager::setCurrentPackage(QString fileName){
     mCurrentPackage = new Package(fileName);
     emit currentPackageNameChanged();
-    qDebug("Set pack");
 }
