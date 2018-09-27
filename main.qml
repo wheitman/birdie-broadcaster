@@ -177,6 +177,35 @@ ApplicationWindow {
         }
     }
 
+    Dialog {
+        id: addPackageDialog
+        height: 400
+        width: 600
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        title: qsTr("Add a package")
+
+        ColumnLayout{
+            anchors.centerIn: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            TextField {
+                id: packNameField
+                placeholderText: "Name (i.e. \"student_news\")"
+            }
+        }
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        onAccepted: {
+            packageManager.addPackage(packNameField.text)
+            tvListView.updateTvModel()
+            packNameField.clear()
+            packageListView.updatePackageModel()
+        }
+        onRejected: {
+            packNameField.clear()
+        }
+    }
+
     FileDialog {
         id: slideFileDialog
         title: "Select the slides to add"
@@ -215,7 +244,7 @@ ApplicationWindow {
                     accentColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
                     title: "PACKAGES"
-                    onAddButtonClicked: slideFileDialog.open()
+                    onAddButtonClicked: addPackageDialog.open()
                     onPackageSelected: packageView.packageChanged()
                 }
                 TvListView{

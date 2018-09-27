@@ -105,6 +105,10 @@ QStringList tvManager::getIpList(){
 
     QFile manifestFile(getTvPath().absolutePath());
 
+    if(!manifestFile.exists()){
+
+    }
+
     if (!manifestFile.open(QIODevice::ReadOnly)) {
             qCritical("Couldn't open TV manifest for read");
     }

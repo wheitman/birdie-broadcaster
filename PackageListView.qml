@@ -36,12 +36,12 @@ Pane {
                 Menu{
                     id: contextMenu
 
-                    TvManager{
+                    PackageManager{
                         id: manager
                     }
 
                     MenuItem {text: "Delete"; onClicked: {
-                            manager.removeTv(list.model.get(list.currentIndex).source)
+                            manager.removePackage(list.model.get(list.currentIndex).name)
                             refresh()
                         }
                     }
@@ -112,8 +112,15 @@ Pane {
         packageManager.resetPackages()
         var packs = packageManager.getPackageFilenames()
         list.model.clear()
-        for(var i in packs){
-            list.model.append({name:packs[i]})
+        if(packs.length===0){
+            list.model.append({name:"No packages were found.\nTo add a package, use the plus button above."})
+            list.enabled=false
+        }
+        else{
+            list.enabled=true
+            for(var i in packs){
+                list.model.append({name:packs[i]})
+            }
         }
     }
 

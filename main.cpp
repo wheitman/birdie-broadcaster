@@ -31,7 +31,5 @@ int main(int argc, char *argv[])
 
     packageManager().initSettings();
 
-    qDebug(QString::number(packageManager().count()).toLatin1());
-
     return app.exec();
 }

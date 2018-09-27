@@ -22,6 +22,8 @@ public:
     Q_INVOKABLE void setCurrentPackage(QString fileName);
     void initSettings();
     Q_INVOKABLE void resetPackages();
+    Q_INVOKABLE void addPackage(QString fileName);
+    Q_INVOKABLE bool removePackage(QString fileName);
 private:
     void checkDirectory();
     QDir mDirectory;

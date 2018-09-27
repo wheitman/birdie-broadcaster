@@ -21,6 +21,22 @@ void packageManager::resetPackages(){
     }
 }
 
+void packageManager::addPackage(QString fileName){
+    mPackages.append(new Package(fileName));
+}
+
+bool packageManager::removePackage(QString fileName){
+    for(int i=0; i<mPackages.length();i++){
+        if(mPackages.at(i)->getPackageFileName()==fileName){
+            mPackages.at(i)->remove();
+            mPackages.removeAt(i);
+            return true;
+        }
+        qDebug(mPackages.at(i)->getPackageFileName().toLatin1()+" != "+fileName.toLatin1());
+    }
+    return false;
+}
+
 void packageManager::checkDirectory(){
     //qInfo("Package Manager is checking the package directory");
     QDir dir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");

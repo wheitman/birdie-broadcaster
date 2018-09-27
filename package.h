@@ -15,6 +15,7 @@ public:
     QString getPackageTitle() const {return mPackageTitle;}
     void open();
     void close();
+    void remove();
     bool isOpened();
 private:
     QString mPackageFileName;
