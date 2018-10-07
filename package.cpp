@@ -22,6 +22,8 @@ Package::Package(QString fileName){
 Package::Package(QString fileName, QString title){
     mPackageFileName = fileName;
     mPackageTitle = title;
+    qDebug("Associating "+mPackageFileName.toLatin1()+" with "+mPackageTitle.toLatin1());
+    settings.setValue(mPackageFileName,mPackageTitle); //associate the file name with the title
 }
 
 void Package::open(){
