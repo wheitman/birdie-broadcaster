@@ -16,7 +16,7 @@ Rectangle {
     }
 
     onPackageChanged: {
-        title.text = packageManager.currentPackageName
+        title.text = packageManager.currentPackageTitle
     }
 
     Rectangle{
@@ -27,7 +27,7 @@ Rectangle {
 
         Text{
             id: title
-            text: packageManager.currentPackageName
+            text: "Package information unavailable."
             horizontalAlignment: Text.AlignHCenter
             color: "white"
             minimumPointSize: 16

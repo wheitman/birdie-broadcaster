@@ -9,13 +9,15 @@
 class Package : public QObject
 {
     Q_OBJECT
-
+    Q_PROPERTY(QString packageTitle READ getPackageTitle WRITE setPackageTitle NOTIFY packageTitleChanged)
 public:
     Package(QString fileName);
     Package(QString fileName, QString title);
     QString getPackageFileName() const {return mPackageFileName;}
-    QString getPackageTitle() const {return mPackageTitle;}
+    QString getPackageTitle();
+    void setPackageTitle(QString title);
     void open();
+    void open(bool overwrite);
     void close();
     void remove();
     bool isOpened();
@@ -26,6 +28,8 @@ private:
     QString mPackageFileName;
     QString mPackageTitle;
     QJsonArray mSlideArray;
+signals:
+    void packageTitleChanged();
 };
 
 #endif // PACKAGE_H

@@ -61,6 +61,15 @@ QString packageManager::getCurrentPackageName(){
     return mCurrentPackage->getPackageFileName();
 }
 
+QString packageManager::getCurrentPackageTitle(){
+    return mCurrentPackage->getPackageTitle();
+}
+
+void packageManager::setCurrentPackageTitle(QString title){
+    mCurrentPackage->setPackageTitle(title);
+    emit currentPackageTitleChanged();
+}
+
 void packageManager::initSettings(){
     QSettings settings("Heitman","Birdie Broadcaster");
     settings.setValue("packageRoot",mDirectory.absolutePath());

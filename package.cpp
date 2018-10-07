@@ -10,6 +10,7 @@ QSettings settings("Heitman","Birdie Broadcaster");
 Package::Package(QString fileName){
     mPackageFileName = fileName;
     if(!QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.toLatin1()).exists()){ //if the package file doesn't already exist
+        qInfo("Package "+mPackageFileName.toLatin1()+" is being created at "+settings.value("packageRoot").toString().toLatin1());
         QDir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).removeRecursively(); //remove the folder if it exists
         QDir().mkdir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()); //create a fresh package folder
         QFile manifest(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //create the manifest in the package folder
@@ -17,10 +18,21 @@ Package::Package(QString fileName){
         manifest.close();
         close();
     }
+    else{
+        qInfo("Package "+mPackageFileName.toLatin1()+" has been located in "+settings.value("packageRoot").toString().toLatin1());
+    }
 }
 
 Package::Package(QString fileName, QString title){
     mPackageFileName = fileName;
+    if(!QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.toLatin1()).exists()){ //if the package file doesn't already exist
+        QDir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).removeRecursively(); //remove the folder if it exists
+        QDir().mkdir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()); //create a fresh package folder
+        QFile manifest(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //create the manifest in the package folder
+        manifest.open(QFile::WriteOnly);
+        manifest.close();
+        close();
+    }
     mPackageTitle = title;
     qDebug("Associating "+mPackageFileName.toLatin1()+" with "+mPackageTitle.toLatin1());
     settings.setValue(mPackageFileName,mPackageTitle); //associate the file name with the title
@@ -29,6 +41,30 @@ Package::Package(QString fileName, QString title){
 void Package::open(){
     JlCompress::extractDir(settings.value("packageRoot").toString()+"/"+mPackageFileName,settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first());
     updateManifest();
+}
+
+void Package::setPackageTitle(QString title){
+    mPackageTitle = title;
+    settings.setValue(mPackageFileName,mPackageTitle);
+}
+
+QString Package::getPackageTitle(){
+    return settings.value(mPackageFileName).toString();
+}
+
+void Package::open(bool overwrite){
+    if(QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).exists()){
+        if(overwrite){
+            qWarning("Package "+mPackageFileName.toLatin1()+" is overwriting the old folder.");
+            QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).remove(); //delete the old directory
+            JlCompress::extractDir(settings.value("packageRoot").toString()+"/"+mPackageFileName,settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first());
+            updateManifest();
+        }
+        else{
+            qWarning("Package "+mPackageFileName.toLatin1()+" is keeping old folder.");
+            return;
+        }
+    }
 }
 
 void Package::updateManifest(){
