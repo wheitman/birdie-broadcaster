@@ -1,9 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls.Material 2.2
 import com.broadcaster.packagemanager 1.0
+import QtQuick.Controls 1.4
 
 Rectangle {
     anchors.fill: parent
+    property color primaryColor: Material.color(Material.BlueGrey)
+    property color accentColor: Material.color(Material.Teal)
+
     signal packageChanged
 
     PackageManager {
@@ -19,6 +23,7 @@ Rectangle {
         color: Material.color(Material.Teal)
         width: parent.width
         height: 50
+        id: titleRect
 
         Text{
             id: title
@@ -30,6 +35,24 @@ Rectangle {
             fontSizeMode: Text.Fit
             anchors.fill: parent
             anchors.margins: 5
+        }
+    }
+    SplitView{
+        id: contentSplit
+        anchors.top: titleRect.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        orientation: Qt.Vertical
+
+        Rectangle{
+            id: slideOverview
+            height: parent.height/4
+            color: primaryColor
+        }
+        Rectangle{
+            height: parent.height-slideOverview.height
         }
     }
 }

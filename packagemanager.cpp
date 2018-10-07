@@ -11,6 +11,7 @@ packageManager::packageManager(QObject *parent) : QObject(parent)
     checkDirectory();
     mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
     resetPackages();
+    defaultExtension = ".bpak";
 }
 
 void packageManager::resetPackages(){
@@ -19,10 +20,16 @@ void packageManager::resetPackages(){
     for(int i = 0; i<filenameList.length(); i++){
         mPackages.append(new Package(filenameList.at(i)));
     }
+    defaultExtension = ".bpak";
 }
 
 void packageManager::addPackage(QString fileName){
-    mPackages.append(new Package(fileName));
+    if (!fileName.endsWith(".bpak")){
+        mPackages.append(new Package(fileName+".bpak"));
+        qWarning("packageManager: Invalid file name. Attempting to fix...");
+    }
+    else
+        mPackages.append(new Package(fileName));
 }
 
 bool packageManager::removePackage(QString fileName){
@@ -32,7 +39,6 @@ bool packageManager::removePackage(QString fileName){
             mPackages.removeAt(i);
             return true;
         }
-        qDebug(mPackages.at(i)->getPackageFileName().toLatin1()+" != "+fileName.toLatin1());
     }
     return false;
 }

@@ -29,6 +29,7 @@ private:
     QDir mDirectory;
     static Package *mCurrentPackage;
     QList<Package*> mPackages;
+    QString defaultExtension;
 signals:
     void currentPackageNameChanged();
 public slots:

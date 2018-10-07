@@ -125,8 +125,7 @@ Pane {
     }
 
     ScrollView{
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: parent.width
         anchors.top: titleRect.bottom
         anchors.bottom: parent.bottom
         id: scrollView

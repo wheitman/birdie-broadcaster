@@ -30,6 +30,9 @@ int main(int argc, char *argv[])
 //    qDebug(manager.getDirectoryPath().toLatin1());
 
     packageManager().initSettings();
+    Package exdee("exdee");
+    qDebug(exdee.getSlideFilenames().first().toLatin1());
+    //exdee.close();
 
     return app.exec();
 }

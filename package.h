@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class Package : public QObject
 {
@@ -17,9 +19,13 @@ public:
     void close();
     void remove();
     bool isOpened();
+    void updateManifest();
+    QStringList getSlideFilenames();
 private:
+    QString getPackageFolderDirectory();
     QString mPackageFileName;
     QString mPackageTitle;
+    QJsonArray mSlideArray;
 };
 
 #endif // PACKAGE_H

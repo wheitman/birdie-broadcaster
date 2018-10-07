@@ -1,6 +1,9 @@
 #include "package.h"
 #include "lib/quazip/JlCompress.h"
 #include <QDir>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 QSettings settings("Heitman","Birdie Broadcaster");
 
@@ -23,6 +26,37 @@ Package::Package(QString fileName, QString title){
 
 void Package::open(){
     JlCompress::extractDir(settings.value("packageRoot").toString()+"/"+mPackageFileName,settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first());
+    updateManifest();
+}
+
+void Package::updateManifest(){
+    QFile manifestFile(getPackageFolderDirectory()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest");
+    if(!manifestFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        qCritical("Package: couldn't open manifest for write");
+    }
+    QByteArray manifestArray = manifestFile.readAll();
+    QJsonDocument manifestDoc(QJsonDocument::fromJson(manifestArray));
+    QJsonObject manifestObject(manifestDoc.object());
+    mSlideArray = manifestObject["slides"].toArray();
+}
+
+QStringList Package::getSlideFilenames(){
+    if(!mSlideArray.isEmpty()){
+        QStringList slideNames;
+        for(int i = 0; i<mSlideArray.size(); i++){
+            QString slideName = mSlideArray[i].toObject()["fileName"].toString();
+            slideNames.append(slideName);
+        }
+        return slideNames;
+    }
+    else{
+        QStringList yeet = {"NULL ERROR"};
+        return yeet;
+    }
+}
+
+QString Package::getPackageFolderDirectory(){
+    return settings.value("packageRoot").toString()+"/"+Package::mPackageFileName.split(".").first();
 }
 
 void Package::close(){
