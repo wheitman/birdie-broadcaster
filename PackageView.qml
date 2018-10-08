@@ -16,7 +16,7 @@ Rectangle {
     }
 
     onPackageChanged: {
-        title.text = packageManager.currentPackageTitle
+        title.text = packageManager.currentPackageTitle.length>0 ? packageManager.currentPackageTitle : packageManager.currentPackageName
     }
 
     Rectangle{

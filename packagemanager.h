@@ -16,6 +16,7 @@ public:
     QString getDirectoryPath() const {return mDirectory.absolutePath();}
     QString getFilePath(QString fileName) const {return mDirectory.absoluteFilePath(fileName);}
     Q_INVOKABLE QStringList getPackageFilenames();
+    Q_INVOKABLE QString getPackageTitle(QString fileName);
     Q_INVOKABLE QString getCurrentPackageName();
     Q_INVOKABLE QString getCurrentPackageTitle();
     Q_INVOKABLE void setCurrentPackageTitle(QString title);
@@ -26,6 +27,7 @@ public:
     void initSettings();
     Q_INVOKABLE void resetPackages();
     Q_INVOKABLE void addPackage(QString fileName);
+    Q_INVOKABLE void addPackage(QString fileName, QString title);
     Q_INVOKABLE bool removePackage(QString fileName);
 private:
     void checkDirectory();

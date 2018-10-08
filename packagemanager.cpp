@@ -32,6 +32,15 @@ void packageManager::addPackage(QString fileName){
         mPackages.append(new Package(fileName));
 }
 
+void packageManager::addPackage(QString fileName, QString title){
+    if (!fileName.endsWith(".bpak")){
+        mPackages.append(new Package(fileName+".bpak",title));
+        qWarning("packageManager: Invalid file name. Attempting to fix...");
+    }
+    else
+        mPackages.append(new Package(fileName,title));
+}
+
 bool packageManager::removePackage(QString fileName){
     for(int i=0; i<mPackages.length();i++){
         if(mPackages.at(i)->getPackageFileName()==fileName){
@@ -55,6 +64,11 @@ void packageManager::checkDirectory(){
 QStringList packageManager::getPackageFilenames(){
     QStringList filenameList = QDir(getDirectoryPath()).entryList(QStringList() << "*.bpak", QDir::Files);
     return filenameList;
+}
+
+QString packageManager::getPackageTitle(QString fileName){
+    QSettings settings("Heitman","Birdie Broadcaster");
+    return settings.value(fileName).toString();
 }
 
 QString packageManager::getCurrentPackageName(){

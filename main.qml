@@ -191,12 +191,19 @@ ApplicationWindow {
             anchors.right: parent.right
             TextField {
                 id: packNameField
-                placeholderText: "Name (i.e. \"student_news\")"
+                placeholderText: "File name (i.e. \"student_news\")"
+            }
+            TextField {
+                id: packTitleField
+                placeholderText: "Title (optional, i.e. \"Student News\")"
             }
         }
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
-            packageManager.addPackage(packNameField.text)
+            if(packTitleField.text.length==0)
+                packageManager.addPackage(packNameField.text)
+            else
+                packageManager.addPackage(packNameField.text,packTitleField.text)
             tvListView.updateTvModel()
             packNameField.clear()
             packageListView.updatePackageModel()
