@@ -10,6 +10,7 @@ class packageManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QString currentPackageName READ getCurrentPackageName WRITE setCurrentPackage NOTIFY currentPackageNameChanged)
     Q_PROPERTY(QString currentPackageTitle READ getCurrentPackageTitle WRITE setCurrentPackageTitle NOTIFY currentPackageTitleChanged)
+    Q_PROPERTY(QStringList currentSlideSources READ getCurrentSlideSources NOTIFY currentSlideSourcesChanged)
 public:
     explicit packageManager(QObject *parent = nullptr);
     QDir getDirectory() const {return mDirectory;}
@@ -19,6 +20,8 @@ public:
     Q_INVOKABLE QString getPackageTitle(QString fileName);
     Q_INVOKABLE QString getCurrentPackageName();
     Q_INVOKABLE QString getCurrentPackageTitle();
+    QStringList getCurrentSlideSources();
+    void setCurrentSlideSources(QStringList slideSourceList);
     Q_INVOKABLE void setCurrentPackageTitle(QString title);
     void setCurrentPackageName(QString fileName);
     Package* getCurrentPackage();
@@ -38,6 +41,7 @@ private:
 signals:
     void currentPackageNameChanged();
     void currentPackageTitleChanged();
+    void currentSlideSourcesChanged();
 public slots:
 };
 

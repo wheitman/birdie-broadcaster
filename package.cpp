@@ -19,7 +19,7 @@ Package::Package(QString fileName){
         close();
     }
     else{
-        qInfo("Package "+mPackageFileName.toLatin1()+" has been located in "+settings.value("packageRoot").toString().toLatin1());
+        qDebug("Package "+mPackageFileName.toLatin1()+" has been located in "+settings.value("packageRoot").toString().toLatin1());
     }
 }
 
@@ -79,18 +79,20 @@ void Package::updateManifest(){
 }
 
 QStringList Package::getSlideFilenames(){
-    if(!mSlideArray.isEmpty()){
-        QStringList slideNames;
-        for(int i = 0; i<mSlideArray.size(); i++){
-            QString slideName = mSlideArray[i].toObject()["fileName"].toString();
-            slideNames.append(slideName);
-        }
-        return slideNames;
-    }
-    else{
-        QStringList yeet = {"NULL ERROR"};
-        return yeet;
-    }
+    QStringList slideNames = QDir(getPackageFolderDirectory()).entryList(QStringList() << "*.jpg" << "*.JPG" << "*.png" << "*.gif");
+    return slideNames;
+//    if(!mSlideArray.isEmpty()){
+//        QStringList slideNames;
+//        for(int i = 0; i<mSlideArray.size(); i++){
+//            QString slideName = mSlideArray[i].toObject()["fileName"].toString();
+//            slideNames.append(slideName);
+//        }
+//        return slideNames;
+//    }
+//    else{
+//        QStringList yeet = {"NULL ERROR"};
+//        return yeet;
+//    }
 }
 
 QString Package::getPackageFolderDirectory(){

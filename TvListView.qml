@@ -21,6 +21,12 @@ Pane {
                 Text { text: name; padding: 5; font.weight: Font.DemiBold}
                 Text { text: "<i>"+source+"</i>"; leftPadding: 5}
             }
+            Rectangle {
+                color: Material.color(Material.BlueGrey, Material.Shade100)
+                width: parent.width
+                height: 1
+            }
+
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton

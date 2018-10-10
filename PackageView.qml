@@ -2,21 +2,24 @@ import QtQuick 2.0
 import QtQuick.Controls.Material 2.2
 import com.broadcaster.packagemanager 1.0
 import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.3
 
 Rectangle {
     anchors.fill: parent
     property color primaryColor: Material.color(Material.BlueGrey)
     property color accentColor: Material.color(Material.Teal)
+    property var slideSources: ["NULL"]
 
     signal packageChanged
 
     PackageManager {
         id: packageManager
-        onCurrentPackageNameChanged: console.log("YEET")
     }
 
     onPackageChanged: {
         title.text = packageManager.currentPackageTitle.length>0 ? packageManager.currentPackageTitle : packageManager.currentPackageName
+        slideSources = packageManager.currentSlideSources
+        console.log(slideSources[0])
     }
 
     Rectangle{
@@ -47,12 +50,21 @@ Rectangle {
         orientation: Qt.Vertical
 
         Rectangle{
-            id: slideOverview
+            id: slideOverviewRect
             height: parent.height/4
             color: primaryColor
+
+            ScrollView{
+                anchors.fill: parent
+                id: slideScrollView
+                RowLayout{
+                    anchors.fill: parent
+                    id: slideOverviewRow
+                }
+            }
         }
         Rectangle{
-            height: parent.height-slideOverview.height
+            height: parent.height-slideOverviewRect.height
         }
     }
 }

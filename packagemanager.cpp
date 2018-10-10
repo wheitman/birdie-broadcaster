@@ -4,13 +4,17 @@
 #include <QtGlobal>
 #include <QSettings>
 
-Package* packageManager::mCurrentPackage = new Package("NULL");
+Package* packageManager::mCurrentPackage;
 
 packageManager::packageManager(QObject *parent) : QObject(parent)
 {
     checkDirectory();
     mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
     resetPackages();
+    if(mPackages.isEmpty())
+        packageManager::mCurrentPackage = new Package("NULL");
+    else
+        packageManager::mCurrentPackage = mPackages.first();
     defaultExtension = ".bpak";
 }
 
@@ -77,6 +81,15 @@ QString packageManager::getCurrentPackageName(){
 
 QString packageManager::getCurrentPackageTitle(){
     return mCurrentPackage->getPackageTitle();
+}
+
+QStringList packageManager::getCurrentSlideSources(){
+    if(!mCurrentPackage->isOpened()){
+        qWarning("Current package not already open. Opening...");
+        mCurrentPackage->open();
+    }
+    QStringList slideSources = mCurrentPackage->getSlideFilenames();
+    return slideSources;
 }
 
 void packageManager::setCurrentPackageTitle(QString title){
