@@ -1,14 +1,17 @@
-import QtQuick 2.0
+import QtQuick 2.11
 import QtQuick.Controls.Material 2.2
 import com.broadcaster.packagemanager 1.0
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.11
 
 Rectangle {
     anchors.fill: parent
     property color primaryColor: Material.color(Material.BlueGrey)
     property color accentColor: Material.color(Material.Teal)
-    property var slideSources: ["NULL"]
+    property var slideSources
+
+    color: Material.color(Material.BlueGrey, Material.Shade50)
 
     signal packageChanged
 
@@ -19,7 +22,18 @@ Rectangle {
     onPackageChanged: {
         title.text = packageManager.currentPackageTitle.length>0 ? packageManager.currentPackageTitle : packageManager.currentPackageName
         slideSources = packageManager.currentSlideSources
-        console.log(slideSources[0])
+    }
+
+    onSlideSourcesChanged: {
+//        var index = 0
+//        var length = slideSources.length
+//        var sources = slideSources.sort()
+//        while(index<length){
+//            console.log(sources[index])
+//            slideOverviewList.model.append({slideSource:sources[index]})
+//            index++
+//        }
+        console.log("Updating repeater with "+slideSources.length+" images.")
     }
 
     Rectangle{
@@ -40,31 +54,38 @@ Rectangle {
             anchors.margins: 5
         }
     }
-    SplitView{
-        id: contentSplit
-        anchors.top: titleRect.bottom
-        anchors.bottom: parent.bottom
+
+    function addSlideThumbnail(SlideSource){
+        slideOverviewList.model.append({slideSource: SlideSource})
+    }
+
+    Rectangle{
+        id: slideOverview
         anchors.left: parent.left
         anchors.right: parent.right
+        height: 135
+        anchors.top: titleRect.bottom
+        color: Material.color(Material.BlueGrey, Material.Shade500)
 
-        orientation: Qt.Vertical
+        ScrollView{
+            id: slideScroll
+            anchors.fill: parent
+            clip: true
+            anchors.margins: 5
 
-        Rectangle{
-            id: slideOverviewRect
-            height: parent.height/4
-            color: primaryColor
-
-            ScrollView{
+            Row{
                 anchors.fill: parent
-                id: slideScrollView
-                RowLayout{
-                    anchors.fill: parent
-                    id: slideOverviewRow
+                spacing: 5
+                Repeater{
+                    model: 8
+                    Image {
+                        height: 125
+                        width: height*16/9
+                        source: slideSources[index]
+                    }
                 }
             }
         }
-        Rectangle{
-            height: parent.height-slideOverviewRect.height
-        }
     }
+
 }

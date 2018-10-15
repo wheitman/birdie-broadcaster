@@ -20,7 +20,7 @@ public:
     Q_INVOKABLE QString getPackageTitle(QString fileName);
     Q_INVOKABLE QString getCurrentPackageName();
     Q_INVOKABLE QString getCurrentPackageTitle();
-    QStringList getCurrentSlideSources();
+    Q_INVOKABLE QStringList getCurrentSlideSources();
     void setCurrentSlideSources(QStringList slideSourceList);
     Q_INVOKABLE void setCurrentPackageTitle(QString title);
     void setCurrentPackageName(QString fileName);

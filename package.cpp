@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFileInfoList>
 
 QSettings settings("Heitman","Birdie Broadcaster");
 
@@ -19,7 +20,8 @@ Package::Package(QString fileName){
         close();
     }
     else{
-        qDebug("Package "+mPackageFileName.toLatin1()+" has been located in "+settings.value("packageRoot").toString().toLatin1());
+        //TODO: Fix this
+        //qDebug("Package "+mPackageFileName.toLatin1()+" has been located in "+settings.value("packageRoot").toString().toLatin1());
     }
 }
 
@@ -79,7 +81,12 @@ void Package::updateManifest(){
 }
 
 QStringList Package::getSlideFilenames(){
-    QStringList slideNames = QDir(getPackageFolderDirectory()).entryList(QStringList() << "*.jpg" << "*.JPG" << "*.png" << "*.gif");
+    QFileInfoList slideInfos = QDir(getPackageFolderDirectory()).entryInfoList(QStringList() << "*.jpg" << "*.JPG" << "*.png" << "*.gif");
+    QStringList slideNames;
+    for(int i = 0; i<slideInfos.length(); i++){
+        slideNames.append("file:"+slideInfos.at(i).absoluteFilePath());
+    }
+    //qDebug(QString::number(slideNames.length()).toLatin1());
     return slideNames;
 //    if(!mSlideArray.isEmpty()){
 //        QStringList slideNames;

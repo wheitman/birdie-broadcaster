@@ -95,6 +95,7 @@ QStringList packageManager::getCurrentSlideSources(){
 void packageManager::setCurrentPackageTitle(QString title){
     mCurrentPackage->setPackageTitle(title);
     emit currentPackageTitleChanged();
+    emit currentSlideSourcesChanged();
 }
 
 void packageManager::initSettings(){
