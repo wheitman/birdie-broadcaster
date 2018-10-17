@@ -7,5 +7,7 @@
         <file>TvListModel.qml</file>
         <file>WelcomeView.qml</file>
         <file>PackageView.qml</file>
+        <file>SlideOverviewModel.qml</file>
+        <file>SlideThumbnail.qml</file>
     </qresource>
 </RCC>

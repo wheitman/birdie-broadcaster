@@ -7,6 +7,7 @@
 #include "packagemanager.h"
 #include "package.h"
 #include "tvmanager.h"
+#include "packagemanifest.h"
 #include <QIcon>
 
 int main(int argc, char *argv[])
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     qmlRegisterType<tvManager>("com.broadcaster.tvmanager",1,0,"TvManager");
+    qmlRegisterType<PackageManifest>("com.broadcaster.packagemanifest",1,0,"PackageManifest");
     qmlRegisterType<packageManager>("com.broadcaster.packagemanager",1,0,"PackageManager");
     engine.load(QUrl("qrc:/main.qml"));
 
@@ -30,6 +32,9 @@ int main(int argc, char *argv[])
 //    qDebug(manager.getDirectoryPath().toLatin1());
 
     packageManager().initSettings();
+    Package exdee("exdee.bpak","Animal Facts");
+    exdee.open(true);
+    //exdee.close();
 
     return app.exec();
 }

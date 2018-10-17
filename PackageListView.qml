@@ -18,10 +18,18 @@ Pane {
         id: tvDelegate
         Item {
             width: parent.width
-            height: 40
+            height: title.length>0 ? 40 : 25
             Column {
-                Text { text: name; padding: 5; font.weight: Font.DemiBold}
+                id: column
+                Text { text: title; padding: 5; bottomPadding: 0; font.weight: Font.Bold; visible: title.length>0}
+                Text { text: name; padding: 5; font.italic: true}
             }
+            Rectangle {
+                color: Material.color(Material.BlueGrey,Material.Shade100)
+                width: parent.width
+                height: 1
+            }
+
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -78,6 +86,9 @@ Pane {
             icon.source: "icons/add.svg"
             icon.color: "white"
             onClicked: addButtonClicked()
+            ToolTip.visible: hovered
+            ToolTip.delay: 1000
+            ToolTip.text: "Add a new package"
         }
         ToolButton{
             id: refreshButton
@@ -87,6 +98,9 @@ Pane {
             anchors.bottom: parent.bottom
             icon.source: "icons/refresh.svg"
             icon.color: "white"
+            ToolTip.visible: hovered
+            ToolTip.delay: 1000
+            ToolTip.text: "Refresh the package list"
             onClicked: {
                 refresh()
             }
@@ -119,14 +133,13 @@ Pane {
         else{
             list.enabled=true
             for(var i in packs){
-                list.model.append({name:packs[i]})
+                list.model.append({title:packageManager.getPackageTitle(packs[i]),name:packs[i]})
             }
         }
     }
 
     ScrollView{
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: parent.width
         anchors.top: titleRect.bottom
         anchors.bottom: parent.bottom
         id: scrollView

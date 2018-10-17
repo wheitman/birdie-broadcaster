@@ -4,13 +4,18 @@
 #include <QtGlobal>
 #include <QSettings>
 
-Package* packageManager::mCurrentPackage = new Package("NULL");
+Package* packageManager::mCurrentPackage;
 
 packageManager::packageManager(QObject *parent) : QObject(parent)
 {
     checkDirectory();
     mDirectory = QDir(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first()+"/packages");
     resetPackages();
+    if(mPackages.isEmpty())
+        packageManager::mCurrentPackage = new Package("NULL");
+    else
+        packageManager::mCurrentPackage = mPackages.first();
+    defaultExtension = ".bpak";
 }
 
 void packageManager::resetPackages(){
@@ -19,10 +24,25 @@ void packageManager::resetPackages(){
     for(int i = 0; i<filenameList.length(); i++){
         mPackages.append(new Package(filenameList.at(i)));
     }
+    defaultExtension = ".bpak";
 }
 
 void packageManager::addPackage(QString fileName){
-    mPackages.append(new Package(fileName));
+    if (!fileName.endsWith(".bpak")){
+        mPackages.append(new Package(fileName+".bpak"));
+        qWarning("packageManager: Invalid file name. Attempting to fix...");
+    }
+    else
+        mPackages.append(new Package(fileName));
+}
+
+void packageManager::addPackage(QString fileName, QString title){
+    if (!fileName.endsWith(".bpak")){
+        mPackages.append(new Package(fileName+".bpak",title));
+        qWarning("packageManager: Invalid file name. Attempting to fix...");
+    }
+    else
+        mPackages.append(new Package(fileName,title));
 }
 
 bool packageManager::removePackage(QString fileName){
@@ -32,7 +52,6 @@ bool packageManager::removePackage(QString fileName){
             mPackages.removeAt(i);
             return true;
         }
-        qDebug(mPackages.at(i)->getPackageFileName().toLatin1()+" != "+fileName.toLatin1());
     }
     return false;
 }
@@ -51,8 +70,32 @@ QStringList packageManager::getPackageFilenames(){
     return filenameList;
 }
 
+QString packageManager::getPackageTitle(QString fileName){
+    QSettings settings("Heitman","Birdie Broadcaster");
+    return settings.value(fileName).toString();
+}
+
 QString packageManager::getCurrentPackageName(){
     return mCurrentPackage->getPackageFileName();
+}
+
+QString packageManager::getCurrentPackageTitle(){
+    return mCurrentPackage->getPackageTitle();
+}
+
+QStringList packageManager::getCurrentSlideSources(){
+    if(!mCurrentPackage->isOpened()){
+        qWarning("Current package not already open. Opening...");
+        mCurrentPackage->open();
+    }
+    QStringList slideSources = mCurrentPackage->getSlideFilenames();
+    return slideSources;
+}
+
+void packageManager::setCurrentPackageTitle(QString title){
+    mCurrentPackage->setPackageTitle(title);
+    emit currentPackageTitleChanged();
+    emit currentSlideSourcesChanged();
 }
 
 void packageManager::initSettings(){
@@ -65,6 +108,7 @@ Package* packageManager::getCurrentPackage(){
 }
 
 void packageManager::setCurrentPackage(QString fileName){
+    mCurrentPackage->close();
     mCurrentPackage = new Package(fileName);
     emit currentPackageNameChanged();
 }
