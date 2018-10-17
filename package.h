@@ -22,6 +22,7 @@ public:
     void remove();
     bool isOpened();
     void updateManifest();
+    Q_INVOKABLE void addSlide(QString location);
     QStringList getSlideFilenames();
 private:
     QString getPackageFolderDirectory();

@@ -108,6 +108,7 @@ Package* packageManager::getCurrentPackage(){
 }
 
 void packageManager::setCurrentPackage(QString fileName){
+    mCurrentPackage->close();
     mCurrentPackage = new Package(fileName);
     emit currentPackageNameChanged();
 }

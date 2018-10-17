@@ -24,7 +24,7 @@ public:
     void setCurrentSlideSources(QStringList slideSourceList);
     Q_INVOKABLE void setCurrentPackageTitle(QString title);
     void setCurrentPackageName(QString fileName);
-    Package* getCurrentPackage();
+    Q_INVOKABLE Package* getCurrentPackage();
     int count() const {return mPackages.length();}
     Q_INVOKABLE void setCurrentPackage(QString fileName);
     void initSettings();
@@ -32,6 +32,7 @@ public:
     Q_INVOKABLE void addPackage(QString fileName);
     Q_INVOKABLE void addPackage(QString fileName, QString title);
     Q_INVOKABLE bool removePackage(QString fileName);
+    Q_INVOKABLE void addSlideToCurrent(QString location) const {mCurrentPackage->addSlide(location);}
 private:
     void checkDirectory();
     QDir mDirectory;

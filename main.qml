@@ -1,5 +1,4 @@
 import QtQuick 2.11
-import QtQuick.Dialogs 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls 2.4
 import QtQuick.Controls.Material 2.1
@@ -210,16 +209,6 @@ ApplicationWindow {
         }
         onRejected: {
             packNameField.clear()
-        }
-    }
-
-    FileDialog {
-        id: slideFileDialog
-        title: "Select the slides to add"
-        folder: shortcuts.pictures
-        selectMultiple: true
-        onAccepted: {
-            console.log(slideFileDialog.fileUrls)
         }
     }
 

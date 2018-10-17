@@ -86,6 +86,9 @@ Pane {
             icon.source: "icons/add.svg"
             icon.color: "white"
             onClicked: addButtonClicked()
+            ToolTip.visible: hovered
+            ToolTip.delay: 1000
+            ToolTip.text: "Add a new package"
         }
         ToolButton{
             id: refreshButton
@@ -95,6 +98,9 @@ Pane {
             anchors.bottom: parent.bottom
             icon.source: "icons/refresh.svg"
             icon.color: "white"
+            ToolTip.visible: hovered
+            ToolTip.delay: 1000
+            ToolTip.text: "Refresh the package list"
             onClicked: {
                 refresh()
             }

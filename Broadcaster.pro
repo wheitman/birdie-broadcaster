@@ -19,7 +19,8 @@ SOURCES += \
         main.cpp \
     package.cpp \
     packagemanager.cpp \
-    tvmanager.cpp
+    tvmanager.cpp \
+    packagemanifest.cpp
 
 RESOURCES += qml.qrc \
     res.qrc
@@ -40,4 +41,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     package.h \
     packagemanager.h \
-    tvmanager.h
+    tvmanager.h \
+    packagemanifest.h

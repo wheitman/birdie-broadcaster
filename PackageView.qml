@@ -1,15 +1,17 @@
 import QtQuick 2.11
 import QtQuick.Controls.Material 2.2
 import com.broadcaster.packagemanager 1.0
+import com.broadcaster.packagemanifest 1.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.11
+import QtQuick.Dialogs 1.2
 
 Rectangle {
     anchors.fill: parent
     property color primaryColor: Material.color(Material.BlueGrey)
     property color accentColor: Material.color(Material.Teal)
-    property var slideSources
+    property var slideSources: ["ERROR"]
 
     color: Material.color(Material.BlueGrey, Material.Shade50)
 
@@ -17,6 +19,7 @@ Rectangle {
 
     PackageManager {
         id: packageManager
+        //onCurrentPackageNameChanged: packageManifest.packageName = currentPackageName
     }
 
     onPackageChanged: {
@@ -77,14 +80,61 @@ Rectangle {
                 anchors.fill: parent
                 spacing: 5
                 Repeater{
-                    model: 8
-                    Image {
+                    model: slideSources[0]=="ERROR" ? 0 : slideSources.length
+                    SlideThumbnail {
                         height: 125
                         width: height*16/9
                         source: slideSources[index]
+                        async: true
                     }
                 }
             }
+        }
+        RoundButton {
+            Material.background: Material.color(Material.Teal, Material.ShadeA700)
+            Material.foreground: "white"
+            text: "+"
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            height: parent.height/3
+            width: height
+            onClicked: slideFileDialog.open()
+            ToolTip.visible: hovered
+            ToolTip.text: "Add a slide to the package."
+            ToolTip.delay: 600
+        }
+    }
+
+    PackageManifest {
+        id: packageManifest
+        packageName: packageManager.getCurrentPackageName()
+    }
+
+    RoundButton{
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: 80
+        height: width
+        icon.source: "qrc:icons/broadcast.svg"
+        icon.color: "white"
+        icon.width: 20
+        icon.height: 40
+        Material.background: accent
+//        onClicked: {
+//            console.log(packageManager.getCurrentPackageName())
+//            console.log(packageManifest.slideNames[0])
+//        }
+    }
+
+    FileDialog {
+        id: slideFileDialog
+        title: "Select the slides to add"
+        folder: shortcuts.pictures
+        selectMultiple: true
+        onAccepted: {
+            console.log(slideFileDialog.fileUrls)
+            slideFileDialog.fileUrls.forEach(packageManager.addSlideToCurrent)
+            slideSourcesChanged()
         }
     }
 

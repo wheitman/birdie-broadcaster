@@ -125,3 +125,16 @@ void Package::remove(){
 bool Package::isOpened(){
     return QDir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).exists();
 }
+
+void Package::addSlide(QString location){
+    QString fileName = location.split("/").last();
+    QString copyName = getPackageFolderDirectory()+"/"+fileName;
+    if (QFile::exists(copyName))
+    {
+        QFile::remove(copyName);
+        qWarning(fileName.toLatin1()+" already found in package. Overwriting.");
+    }
+    if(!QFile::copy(location.mid(8), copyName))
+            qDebug("ERROR");
+    qDebug("Copying "+location.toLatin1()+" to "+copyName.toLatin1());
+}
