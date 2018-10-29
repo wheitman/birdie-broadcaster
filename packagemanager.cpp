@@ -109,6 +109,7 @@ Package* packageManager::getCurrentPackage(){
 
 void packageManager::setCurrentPackage(QString fileName){
     mCurrentPackage->close();
-    mCurrentPackage = new Package(fileName);
+    mCurrentPackage = new Package(fileName, true);
     emit currentPackageNameChanged();
+    qDebug("Changing package to "+fileName.toLatin1());
 }

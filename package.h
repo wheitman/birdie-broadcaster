@@ -12,6 +12,7 @@ class Package : public QObject
     Q_PROPERTY(QString packageTitle READ getPackageTitle WRITE setPackageTitle NOTIFY packageTitleChanged)
 public:
     Package(QString fileName);
+    Package(QString fileName, bool open);
     Package(QString fileName, QString title);
     QString getPackageFileName() const {return mPackageFileName;}
     QString getPackageTitle();

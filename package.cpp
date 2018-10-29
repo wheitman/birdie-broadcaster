@@ -25,6 +25,24 @@ Package::Package(QString fileName){
     }
 }
 
+Package::Package(QString fileName, bool open){
+    mPackageFileName = fileName;
+    if(open){
+        if(!QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.toLatin1()).exists()){ //if the package file doesn't already exist
+            qInfo("Package "+mPackageFileName.toLatin1()+" is being created at "+settings.value("packageRoot").toString().toLatin1());
+            QDir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).removeRecursively(); //remove the folder if it exists
+            QDir().mkdir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()); //create a fresh package folder
+            QFile manifest(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //create the manifest in the package folder
+            manifest.open(QFile::WriteOnly);
+            manifest.close();
+        }
+    }
+    else{
+        new Package(fileName);
+    }
+
+}
+
 Package::Package(QString fileName, QString title){
     mPackageFileName = fileName;
     if(!QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.toLatin1()).exists()){ //if the package file doesn't already exist
@@ -41,6 +59,16 @@ Package::Package(QString fileName, QString title){
 }
 
 void Package::open(){
+    qDebug("Package "+mPackageFileName.toLatin1()+" is being opened.");
+    if(!QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.toLatin1()).exists()){ //if the package file doesn't already exist
+        qInfo("Package "+mPackageFileName.toLatin1()+" is being created at "+settings.value("packageRoot").toString().toLatin1());
+        QDir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).removeRecursively(); //remove the folder if it exists
+        QDir().mkdir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()); //create a fresh package folder
+        QFile manifest(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //create the manifest in the package folder
+        manifest.open(QFile::WriteOnly);
+        manifest.close();
+        close();
+    }
     JlCompress::extractDir(settings.value("packageRoot").toString()+"/"+mPackageFileName,settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first());
     updateManifest();
 }
@@ -55,6 +83,7 @@ QString Package::getPackageTitle(){
 }
 
 void Package::open(bool overwrite){
+    qDebug("Package "+mPackageFileName.toLatin1()+" is being opened.");
     if(QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()).exists()){
         if(overwrite){
             qWarning("Package "+mPackageFileName.toLatin1()+" is overwriting the old folder.");
@@ -72,7 +101,11 @@ void Package::open(bool overwrite){
 void Package::updateManifest(){
     QFile manifestFile(getPackageFolderDirectory()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest");
     if(!manifestFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        qCritical("Package: couldn't open manifest for write");
+        qCritical("Package "+mPackageFileName.toLatin1()+": couldn't open manifest for write");
+        QDir().mkdir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()); //create a fresh package folder
+        QFile manifest(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //create the manifest in the package folder
+        manifest.open(QFile::WriteOnly);
+        manifest.close();
     }
     QByteArray manifestArray = manifestFile.readAll();
     QJsonDocument manifestDoc(QJsonDocument::fromJson(manifestArray));

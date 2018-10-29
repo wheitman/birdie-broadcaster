@@ -105,10 +105,10 @@ Rectangle {
         }
     }
 
-    PackageManifest {
-        id: packageManifest
-        packageName: packageManager.getCurrentPackageName()
-    }
+//    PackageManifest {
+//        id: packageManifest
+//        packageName: packageManager.getCurrentPackageName()
+//    }
 
     RoundButton{
         anchors.bottom: parent.bottom

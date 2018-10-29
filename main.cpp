@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     packageManager().initSettings();
     Package exdee("exdee.bpak","Animal Facts");
-    exdee.open(true);
+    exdee.open();
     //exdee.close();
 
     return app.exec();
