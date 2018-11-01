@@ -113,6 +113,7 @@ ApplicationWindow {
                     Material.background: "#fff200"
                     onClicked: {
                         canaryDialog.level = "T"
+                        canaryStack.push(whatSay)
                     }
                 }
 
@@ -130,6 +131,7 @@ ApplicationWindow {
                     Material.background: "#fff200"
                     onClicked: {
                         canaryDialog.level = "M"
+                        canaryStack.push(whatSay)
                     }
                 }
 
@@ -174,16 +176,20 @@ ApplicationWindow {
                 anchors.leftMargin: 10
                 TextField {
                     id: titleField
-                    placeholderText: "ex: Weather Alert"
+                    placeholderText: "Title (ex: <i>Weather Alert</i>)"
                     maximumLength: 25
-                    width: parent.width
+                    width: parent.width-10
                     onTextChanged: canaryDialog.msgTitle = text
+                    anchors.leftMargin: 10
+                    anchors.left: parent.left
                 }
                 TextArea {
                     id: bodyField
-                    width: parent.width
-                    placeholderText: "ex: Sign out has been suspended due to severe weather. Follow instructions from staff."
+                    width: parent.width-10
+                    placeholderText: "Body (ex: <i>Sign out has been suspended due to severe weather. Follow instructions from staff.</i>)"
                     onTextChanged: canaryDialog.msgBody = text
+                    anchors.leftMargin: 10
+                    anchors.left: parent.left
                 }
             }
             Button {
@@ -220,35 +226,60 @@ ApplicationWindow {
             Label {
                 id: reviewText
                 color: "#edeeee"
-                font.pointSize: 18
+                font.pointSize: 12
                 anchors.top: reviewTitle.bottom
                 width: parent.width
                 wrapMode: Text.Wrap
-                text: "You are about to "
+                text: ""
+                horizontalAlignment: Text.AlignHCenter
             }
-            DelayButton {
+            Button {
                 id: sendButton
                 Material.background: "#fff200"
-                text: "Broadcast "
+                text: ""
                 anchors.top: reviewText.bottom
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
+                onClicked: {
+                    canaryDialog.accept()
+                    tvManager.canaryType=canaryDialog.level
+                    tvManager.canaryTitle=canaryDialog.msgTitle
+                    tvManager.canaryBody=canaryDialog.msgBody
+                    tvManager.broadcastCanary()
+                    reviewPage.request('http://localhost:8080/canary?type=1&body='+tvManager.canaryBody+'&level='+tvManager.canaryType, function (o){
+                        var d = eval('new Object(' + o.responseText + ')');
+                        if(d.status==="success"){
+                            console.log("WE'RE GOOD")
+                        }
+                    });
+                }
+            }
+
+            function request(url, callback){
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = (function(myRequest) {
+                    return function() {
+                        callback(myRequest);
+                    }
+                })(request);
+                request.open('GET', url, true);
+                request.send('');
             }
 
             function updateReview(){
-                reviewText.text = ""
+                reviewText.text = "<i>You are about to "
                 if(canaryDialog.level=="Y"){
-                    reviewText.text+= "override all tickers with your message, plus play a short alert tone."
-                    sendButton.text+= "Advisory"
+                    reviewText.text+= "override all tickers with your message, plus play a short alert tone.</i>"
+                    sendButton.text+= "Broadcast Advisory"
                 }
                 if(canaryDialog.level=="T"){
-                    reviewText.text+= "display a fullscreen message on all campus TVs, plus play a short alert tone."
-                    sendButton.text+= "Alert"
+                    reviewText.text+= "display a fullscreen message on all campus TVs, plus play a short alert tone.</i>"
+                    sendButton.text+= "Broadcast Alert"
                 }
                 if(canaryDialog.level=="M"){
-                    reviewText.text+= "display a fullscreen message on all campus TVs, plus play a continuous alarm tone."
-                    sendButton.text+= "Alarm"
+                    reviewText.text+= "display a fullscreen message on all campus TVs, plus play a continuous alarm tone.</i>"
+                    sendButton.text+= "Broadcast Alarm"
                 }
                 reviewText.text+="<br/>Title: "+canaryDialog.msgTitle+"<br/>Body: "+canaryDialog.msgBody
             }
@@ -274,7 +305,6 @@ ApplicationWindow {
             anchors.left: parent.left
             onClicked: canaryStack.pop()
             enabled: canaryStack.depth>1
-
         }
 
         header.visible: false

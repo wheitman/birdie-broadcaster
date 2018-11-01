@@ -131,3 +131,28 @@ QStringList tvManager::getIpList(){
     manifestFile.close();
     return IPs;
 }
+
+void tvManager::setCanaryType(QString type){
+    if(mCanaryType!=type){
+        mCanaryType=type;
+        emit canaryChanged();
+    }
+}
+
+void tvManager::setCanaryTitle(QString title){
+    if(mCanaryTitle!=title){
+        mCanaryTitle=title;
+        emit canaryChanged();
+    }
+}
+
+void tvManager::setCanaryBody(QString body){
+    if(mCanaryBody!=body){
+        mCanaryBody=body;
+        emit canaryChanged();
+    }
+}
+
+void tvManager::broadcastCanary(){
+    qDebug("Broadcasting Canary with type \""+mCanaryType.toLatin1()+"\", title \""+mCanaryTitle.toLatin1()+"\", and body \""+mCanaryBody.toLatin1());
+}
