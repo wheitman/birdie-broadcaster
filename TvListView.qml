@@ -19,13 +19,28 @@ Pane {
             height: 40
             Column {
                 Text { text: name; padding: 5; font.weight: Font.DemiBold}
-                Text { text: "<i>"+source+"</i>"; leftPadding: 5}
+                Row {
+                    Text { text: "⬤ "; color: status=="online" ? Material.color(Material.Green) : Material.color(Material.Red); leftPadding: 5}
+                    Text { text: "<i>"+source+"</i>"; }
+
+                }
+                anchors.left: parent.left
+                //anchors.leftMargin: 25
             }
             Rectangle {
                 color: Material.color(Material.BlueGrey, Material.Shade100)
                 width: parent.width
                 height: 1
             }
+//            Rectangle {
+//                color: "red"
+//                anchors.left: parent.left
+//                anchors.top: parent.top
+//                anchors.margins: (parent.height-height)/2
+//                height: parent.height/4
+//                width: height
+//                radius: width/2
+//            }
 
             MouseArea {
                 anchors.fill: parent
@@ -107,12 +122,41 @@ Pane {
         refreshButton.rotation+=360
     }
 
+    function getStatus(ip, index){
+        var status = ""
+        request('http://'+ip+':8080/status', function (o){
+            if(o.responseText.includes("good")){
+                status = "online"
+                setTvStatus("online",index)
+            }
+            else{
+                status = "offline"
+            }
+        });
+        return status
+    }
+
+    function setTvStatus(status, index){
+        list.model.get(index).status = status
+    }
+
+    function request(url, callback){
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = (function(myRequest) {
+            return function() {
+                callback(myRequest);
+            }
+        })(request);
+        request.open('GET', url, true);
+        request.send('');
+    }
+
     function updateTvModel(){
         var tvs = tvManager.getTvList()
         var ips = tvManager.getIpList()
         list.model.clear()
         for(var i in tvs){
-            list.model.append({name:tvs[i],source:ips[i]})
+            list.model.append({name:tvs[i],source:ips[i], status:getStatus(ips[i],i)})
         }
     }
 

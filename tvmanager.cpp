@@ -7,9 +7,11 @@
 #include <QJsonValue>
 #include <QVariant>
 
+
+
 tvManager::tvManager(QObject *parent) : QObject(parent)
 {
-
+    mCanaryType='0';
 }
 
 QDir tvManager::getTvPath(){

@@ -16,6 +16,7 @@ ApplicationWindow {
 
     property int accent: Material.Teal
     property int primary: Material.BlueGrey
+    property bool activeCanary: tvManager.canaryType!='0'
 
     Material.theme: Material.Light
     Material.primary: primary
@@ -247,12 +248,14 @@ ApplicationWindow {
                     tvManager.canaryTitle=canaryDialog.msgTitle
                     tvManager.canaryBody=canaryDialog.msgBody
                     tvManager.broadcastCanary()
-                    reviewPage.request('http://localhost:8080/canary?type=1&body='+tvManager.canaryBody+'&level='+tvManager.canaryType, function (o){
-                        var d = eval('new Object(' + o.responseText + ')');
-                        if(d.status==="success"){
-                            console.log("WE'RE GOOD")
-                        }
-                    });
+
+                    var ips = tvManager.getIpList()
+                    for(var i = 0; i<ips.length; i++){
+                        reviewPage.request('http://'+ips[i]+':8080/canary?type=1&body='+tvManager.canaryBody+'&level='+tvManager.canaryType, function (o){
+                            var d = eval('new Object(' + o.responseText + ')');
+                        });
+                    }
+
                 }
             }
 
@@ -313,39 +316,47 @@ ApplicationWindow {
     }
 
     Dialog {
-        id: alertConfirmation
-        height: 400
-        width: 600
+        id: canaryLiftDialog
+        height: window.height/3.5
+        width: window.width/3.5
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        title: qsTr("Canary Alert")
-        background: Rectangle{
-            anchors.fill: parent
-            color: Material.color(Material.Yellow)
+        title: qsTr("Lift Canary Alert")
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        property color primary: "#394648"
+        property color accent: "#394648"
+        property color highlight: "#fff200"
+
+        Text {
+            text: "Are you sure you want to lift the active alert?"
+            font.pointSize: 14
+            width: parent.width
+            wrapMode: Text.Wrap
         }
-        header.visible: false
-        Label{
-            text: "This will broadcast a Canary alert across campus. Are you sure?"
-        }
-        RowLayout{
-            anchors.centerIn: parent
-            anchors.bottom: parent.bottom
-            Button {
-                id: alertConfirm
-                onClicked: {
-                    canaryDialog.close()
-                    alertConfirmation.accept()
-                }
-                text: "Send Alert"
+
+        onAccepted: {
+            var ips = tvManager.getIpList()
+            for(var i = 0; i<ips.length; i++){
+                request('http://'+ips[i]+':8080/canary?type=0', function (o){
+                    var d = eval('new Object(' + o.responseText + ')');
+                });
             }
-            Button {
-                text: "Cancel"
-                onClicked: {
-                    canaryDialog.close()
-                    alertConfirmation.reject()
-                }
-            }
+            tvManager.canaryType='0'
         }
+
+        function request(url, callback){
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = (function(myRequest) {
+                return function() {
+                    callback(myRequest);
+                }
+            })(request);
+            request.open('GET', url, true);
+            request.send('');
+        }
+
     }
 
     Dialog {
@@ -476,9 +487,15 @@ ApplicationWindow {
                     id: canaryButton
                     text: "Send Canary Message"
                     anchors.centerIn: parent
-                    Material.background: "#fff200"
+                    Material.background: tvManager.canaryType=='0' ? "#fff200" : Material.color(Material.Red)
                     Material.accent: "#394648"
-                    onClicked: canaryDialog.open()
+                    onClicked: if(!activeCanary){
+                                   canaryDialog.open()
+                               }
+                               else{
+                                   canaryLiftDialog.open()
+                               }
+
                 }
             }
         }
