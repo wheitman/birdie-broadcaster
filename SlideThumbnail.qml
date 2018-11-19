@@ -2,17 +2,35 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 
 Rectangle {
-    border.width: 1
-    border.color: "#80000000"
+    border.width: highlighted ? 2 : 1
+    border.color: highlighted ? "white" : "#80000000"
     color: "transparent"
     width: height*16/9
     property string source;
     property bool async: true;
+    property bool highlighted: false;
+    signal deleteClicked()
 
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: {
+            highlighted = true;
+            if (mouse.button === Qt.RightButton)
+                contextMenu.popup()
+        }
+        Menu{
+            id: contextMenu
+            MenuItem {text: "Delete"; onClicked: {
+                    deleteClicked()
+                }
+            }
+        }
+    }
 
     Image {
         id: thumbImg
-        anchors.margins: 1
+        anchors.margins: parent.border.width
         anchors.fill: parent
         source: parent.source
         asynchronous: async

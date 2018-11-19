@@ -21,6 +21,7 @@ public:
     void open(bool overwrite);
     void close();
     void remove();
+    void deleteSlide(QString name);
     bool isOpened();
     void updateManifest();
     Q_INVOKABLE void addSlide(QString location);

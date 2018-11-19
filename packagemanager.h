@@ -33,6 +33,7 @@ public:
     Q_INVOKABLE void addPackage(QString fileName, QString title);
     Q_INVOKABLE bool removePackage(QString fileName);
     Q_INVOKABLE void addSlideToCurrent(QString location) const {mCurrentPackage->addSlide(location);}
+    Q_INVOKABLE void deleteSlideFromCurrent(QString name) const {mCurrentPackage->deleteSlide(name);}
 private:
     void checkDirectory();
     QDir mDirectory;

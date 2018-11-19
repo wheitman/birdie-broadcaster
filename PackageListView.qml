@@ -13,6 +13,7 @@ Pane {
     signal refresh
     signal packageSelected
     property bool highlighted: false
+    property bool loading: false
     padding: 0
     Component {
         id: tvDelegate
@@ -24,6 +25,7 @@ Pane {
                 Text { text: title; padding: 5; bottomPadding: 0; font.weight: Font.Bold; visible: title.length>0}
                 Text { text: name; padding: 5; font.italic: true}
             }
+
             Rectangle {
                 color: Material.color(Material.BlueGrey,Material.Shade100)
                 width: parent.width

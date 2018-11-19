@@ -435,7 +435,7 @@ ApplicationWindow {
 
         Rectangle{
             id: sidebar
-            width: parent.width/4
+            width: parent.width/6
             color: Material.color(primary,Material.Shade50)
 
             SplitView{
@@ -454,6 +454,7 @@ ApplicationWindow {
                             welcomeView.visible = false
                         }
                     }
+
                     accentColor: Material.color(accent, Material.Shade100)
                     primaryColor: Material.color(accent)
                     title: "PACKAGES"
@@ -508,6 +509,7 @@ ApplicationWindow {
             PackageView{
                 id: packageView
                 visible: false
+                onLoaded: packageListView.loading=false
             }
         }
     }

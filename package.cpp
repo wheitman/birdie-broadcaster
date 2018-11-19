@@ -171,3 +171,15 @@ void Package::addSlide(QString location){
             qDebug("ERROR");
     qDebug("Copying "+location.toLatin1()+" to "+copyName.toLatin1());
 }
+
+void Package::deleteSlide(QString name){
+    qDebug("Deleting "+settings.value("packageRoot").toString().toLatin1()+"/"+mPackageFileName.split(".").first().toLatin1()+"/"+name.toLatin1());
+    if(!isOpened()){
+        open();
+        QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+name.toLatin1()).remove();
+        close();
+    }
+    else{
+        QFile(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+name.toLatin1()).remove();
+    }
+}
