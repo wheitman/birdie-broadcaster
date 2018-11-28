@@ -484,12 +484,13 @@ ApplicationWindow {
                 anchors.bottom: parent.bottom
                 height: (parent.height/20)<canaryButton.implicitHeight ? canaryButton.implicitHeight : parent.height/20
                 width: parent.width
-                Button {
+                RoundButton {
                     id: canaryButton
                     text: "Send Canary Message"
                     anchors.centerIn: parent
                     Material.background: tvManager.canaryType=='0' ? "#fff200" : Material.color(Material.Red)
                     Material.accent: "#394648"
+                    radius: height/3
                     onClicked: if(!activeCanary){
                                    canaryDialog.open()
                                }

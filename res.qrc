@@ -6,6 +6,7 @@
         <file alias="broadcast64.ico">res/broadcast64.ico</file>
         <file alias="back.svg">res/back.svg</file>
         <file alias="error.svg">res/error.svg</file>
+        <file alias="save.svg">res/save.svg</file>
     </qresource>
     <qresource prefix="/res">
         <file alias="blankTV.png">res/blankTV.png</file>

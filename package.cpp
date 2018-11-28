@@ -99,8 +99,8 @@ void Package::open(bool overwrite){
 }
 
 void Package::updateManifest(){
-    QFile manifestFile(getPackageFolderDirectory()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest");
-    if(!manifestFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    QFile manifestFile(getPackageFolderDirectory()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //find the proper manifest file
+    if(!manifestFile.open(QIODevice::ReadWrite | QIODevice::Text)) { //if open failed
         qCritical("Package "+mPackageFileName.toLatin1()+": couldn't open manifest for write");
         QDir().mkdir(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()); //create a fresh package folder
         QFile manifest(settings.value("packageRoot").toString()+"/"+mPackageFileName.split(".").first()+"/"+mPackageFileName.split(".").first().toLatin1()+".manifest"); //create the manifest in the package folder
@@ -111,6 +111,11 @@ void Package::updateManifest(){
     QJsonDocument manifestDoc(QJsonDocument::fromJson(manifestArray));
     QJsonObject manifestObject(manifestDoc.object());
     mSlideArray = manifestObject["slides"].toArray();
+    QStringList slideNames = getSlideFilenames();
+    for(int i=0; i<slideNames.length();i++){
+        mSlideArray.append(slideNames[i]);
+    }
+    qDebug("Slides: "+mSlideArray.last().toString().toLatin1());
 }
 
 QStringList Package::getSlideFilenames(){

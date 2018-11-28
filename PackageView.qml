@@ -30,14 +30,6 @@ Rectangle {
     }
 
     onSlideSourcesChanged: {
-//        var index = 0
-//        var length = slideSources.length
-//        var sources = slideSources.sort()
-//        while(index<length){
-//            console.log(sources[index])
-//            slideOverviewList.model.append({slideSource:sources[index]})
-//            index++
-//        }
         console.log("Updating repeater with "+slideSources.length+" images.")
         updateOverviewList()
         imagePreview.source=slideSources[0]
@@ -59,6 +51,26 @@ Rectangle {
             fontSizeMode: Text.Fit
             anchors.fill: parent
             anchors.margins: 5
+        }
+        RoundButton {
+            id: broadcastButton
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.bottom
+            height: parent.height*1.5
+            width: height
+            anchors.margins: 5
+            radius: height/2
+            Material.background: Material.color(Material.Teal, Material.ShadeA700)
+            Material.foreground: "white"
+            icon.source: "icons/broadcast.svg"
+        }
+        ToolButton {
+            id: saveButton
+            anchors.right: broadcastButton.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            icon.source: "icons/save.svg"
+            icon.color: "white"
         }
     }
 
@@ -120,100 +132,211 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id: slideOverview
+    SplitView {
+        id: overviewSplit
+        orientation: Qt.Vertical
         anchors.left: parent.left
         width: parent.width/5
         anchors.top: titleRect.bottom
         anchors.bottom: parent.bottom
 
         Rectangle {
-            id: overviewTitleRect
-            color: accentColor
+            id: slideOverview
             anchors.top: parent.top
             width: parent.width
-            height: 30
-            Text {
-                id: titleText
-                padding: 5
-                minimumPointSize: 10
-                font.pointSize: 40
+            height: parent.height/2
+
+            Rectangle {
+                id: overviewTitleRect
+                color: accentColor
                 anchors.top: parent.top
-                anchors.left: parent.left
-                fontSizeMode: Text.VerticalFit
-                text: "SLIDES"
-                color: "white"
-                height: parent.height*3/5
-            }
-            ToolButton{
-                id: addButton
-                height: parent.height
-                width: height
-                anchors.right: refreshButton.left
-                anchors.top: parent.top
-                icon.source: "icons/add.svg"
-                icon.color: "white"
-                onClicked: slideFileDialog.open()
-            }
-            ToolButton{
-                id: refreshButton
-                height: parent.height
-                width: height
-                anchors.right: parent.right
-                anchors.top: parent.top
-                icon.source: "icons/refresh.svg"
-                icon.color: "white"
-                onClicked: {
-                    slideSourcesChanged()
-                    rotation+=360
+                width: parent.width
+                height: 30
+                Text {
+                    id: titleText
+                    padding: 5
+                    minimumPointSize: 10
+                    font.pointSize: 40
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    fontSizeMode: Text.VerticalFit
+                    text: "SLIDES"
+                    color: "white"
+                    height: parent.height*3/5
                 }
-                Behavior on rotation {
-                    NumberAnimation {
-                        duration: 600
-                        easing.type: Easing.OutQuad
+                ToolButton{
+                    id: addButton
+                    height: parent.height
+                    width: height
+                    anchors.right: refreshButton.left
+                    anchors.top: parent.top
+                    icon.source: "icons/add.svg"
+                    icon.color: "white"
+                    onClicked: slideFileDialog.open()
+                }
+                ToolButton{
+                    id: refreshButton
+                    height: parent.height
+                    width: height
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    icon.source: "icons/refresh.svg"
+                    icon.color: "white"
+                    onClicked: {
+                        slideSourcesChanged()
+                        rotation+=360
+                    }
+                    Behavior on rotation {
+                        NumberAnimation {
+                            duration: 600
+                            easing.type: Easing.OutQuad
+                        }
+                    }
+                }
+            }
+
+            ScrollView{
+                anchors.top: overviewTitleRect.bottom
+                anchors.bottom: parent.bottom
+                width: parent.width
+                id: scrollView
+                background: Rectangle{
+                    anchors.fill: parent
+                    border.color: Material.color(Material.BlueGrey, Material.Shade100)
+                    border.width: 1
+                    color: Material.color(Material.BlueGrey, Material.Shade50)
+                }
+
+                ListView {
+                    id: list
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    width: 200
+                    model: SlideOverviewModel{}
+                    delegate: slideListItem
+                    highlight: Rectangle { color: Material.color(accent, Material.Shade100)}
+                    //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
+                    highlightMoveDuration: 100
+                    clip: true
+                    Component.onCompleted: {
+                        updateOverviewList()
+                    }
+
+                    onCurrentIndexChanged: {
+                        var source = model.get(currentIndex).sourceID
+                        if (source.toUpperCase().endsWith(".MP4") || source.toUpperCase().endsWith(".WAV") || source.toUpperCase().endsWith(".MOV")){
+                            videoPreview.source=source
+                        }
+                        else if (source.toUpperCase().endsWith(".PNG") || source.toUpperCase().endsWith(".JPG") || source.toUpperCase().endsWith(".GIF") || source.toUpperCase().endsWith(".JPEG")){
+                            imagePreview.source=source
+                        }
+                        else{
+                            console.log("PackageView Error: unsupported file format.")
+                        }
                     }
                 }
             }
         }
 
-        ScrollView{
-            anchors.top: overviewTitleRect.bottom
-            anchors.bottom: parent.bottom
+        Rectangle {
+            id: tickerOverview
+            anchors.top: slideOverview.bottom
             width: parent.width
-            id: scrollView
-            background: Rectangle{
-                anchors.fill: parent
-                border.color: Material.color(Material.BlueGrey, Material.Shade100)
-                border.width: 1
-                color: Material.color(Material.BlueGrey, Material.Shade50)
+            height: parent.height/3
+            Rectangle {
+                id: titleTickerRect
+                color: accentColor
+                anchors.top: parent.top
+                width: parent.width
+                height: 50
+                Text {
+                    id: titleTickerText
+                    padding: 5
+                    minimumPointSize: 10
+                    font.pointSize: 40
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    fontSizeMode: Text.VerticalFit
+                    text: "TICKERS"
+                    color: "white"
+                    height: parent.height*3/5
+                }
+                ToolButton{
+                    id: addTickerButton
+                    height: parent.height*.5
+                    width: height
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    icon.source: "icons/add.svg"
+                    icon.color: "white"
+                    onClicked: addButtonClicked()
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 1000
+                    ToolTip.text: "Add a new ticker"
+                }
+                ToolButton{
+                    id: refreshTickerButton
+                    height: parent.height*.5
+                    width: height
+                    anchors.left: addTickerButton.right
+                    anchors.bottom: parent.bottom
+                    icon.source: "icons/refresh.svg"
+                    icon.color: "white"
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 1000
+                    ToolTip.text: "Refresh the ticker list"
+                    onClicked: {
+                        refresh()
+                    }
+                    Behavior on rotation {
+                        NumberAnimation {
+                            duration: 600
+                            easing.type: Easing.OutQuad
+                        }
+                    }
+                }
             }
 
-            ListView {
-                id: list
-                anchors.top: parent.top
+            ScrollView{
+                anchors.top: titleTickerRect.bottom
                 anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                width: 200
-                model: SlideOverviewModel{}
-                delegate: slideListItem
-                highlight: Rectangle { color: Material.color(accent, Material.Shade100)}
-                //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
-                highlightMoveDuration: 100
-                clip: true
-                Component.onCompleted: {
-                    updateOverviewList()
+                width: parent.width
+                id: scrollTickerView
+                background: Rectangle{
+                    anchors.fill: parent
+                    border.color: Material.color(Material.BlueGrey, Material.Shade100)
+                    border.width: 1
+                    color: Material.color(Material.BlueGrey, Material.Shade50)
                 }
 
-                onCurrentIndexChanged: {
-                    var source = model.get(currentIndex).sourceID
-                    if (source.toUpperCase().endsWith(".MP4") || source.toUpperCase().endsWith(".WAV") || source.toUpperCase().endsWith(".MOV")){
-                        videoPreview.source=source
+                ListView {
+                    id: tickerList
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    width: 200
+                    model: SlideOverviewModel{}
+                    delegate: slideListItem
+                    highlight: Rectangle { color: Material.color(accent, Material.Shade100)}
+                    //onCurrentItemChanged: console.log(model.get(list.currentIndex).name + ' selected')
+                    highlightMoveDuration: 100
+                    clip: true
+                    Component.onCompleted: {
+                        updateOverviewList()
                     }
-                    else if (source.toUpperCase().endsWith(".PNG") || source.toUpperCase().endsWith(".JPG") || source.toUpperCase().endsWith(".GIF") || source.toUpperCase().endsWith(".JPEG")){
-                        imagePreview.source=source
-                    }
-                    else{
-                        console.log("PackageView Error: unsupported file format.")
+
+                    onCurrentIndexChanged: {
+                        var source = model.get(currentIndex).sourceID
+                        if (source.toUpperCase().endsWith(".MP4") || source.toUpperCase().endsWith(".WAV") || source.toUpperCase().endsWith(".MOV")){
+                            videoPreview.source=source
+                        }
+                        else if (source.toUpperCase().endsWith(".PNG") || source.toUpperCase().endsWith(".JPG") || source.toUpperCase().endsWith(".GIF") || source.toUpperCase().endsWith(".JPEG")){
+                            imagePreview.source=source
+                        }
+                        else{
+                            console.log("PackageView Error: unsupported file format.")
+                        }
                     }
                 }
             }
@@ -223,7 +346,7 @@ Rectangle {
     Rectangle {
         id: slidePreview
         anchors.top: titleRect.bottom
-        anchors.left: slideOverview.right
+        anchors.left: overviewSplit.right
         anchors.right: parent.right
         height: parent.height/2
         color: "transparent"
@@ -245,7 +368,7 @@ Rectangle {
             anchors.centerIn: blankTV
             width: blankTV.height*720/428*0.9625
             height: blankTV.height*0.9159
-
+            //onStatusChanged: playing = (status == AnimatedImage.Ready)
             fillMode: Image.Stretch
             asynchronous: true
         }

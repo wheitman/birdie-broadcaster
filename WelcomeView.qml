@@ -11,6 +11,9 @@ Rectangle {
         id: broadcastImage
         source: "icons/broadcast.svg"
         anchors.left: parent.left; anchors.top: parent.top; anchors.bottom: parent.bottom
+        sourceSize.width: 300
+        sourceSize.height: 300
+
         fillMode: Image.PreserveAspectFit
         anchors.topMargin: parent.height*.3; anchors.bottomMargin: anchors.topMargin; anchors.leftMargin: anchors.topMargin/2
     }
